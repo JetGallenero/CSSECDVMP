@@ -54,6 +54,7 @@ public class Register extends javax.swing.JPanel {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backBtnActionPerformed(evt);
             }
+
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -114,15 +115,18 @@ public class Register extends javax.swing.JPanel {
         frame.loginNav();
         Login.usernameFld.setText("");
         Login.passwordFld.setText("");
+        Register.usernameFld.setText("");
+        Register.passwordFld.setText("");
+        Register.confpassFld.setText("");
     }//GEN-LAST:event_backBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JTextField confpassFld;
+    private static javax.swing.JTextField confpassFld;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField passwordFld;
+    private static javax.swing.JTextField passwordFld;
     private javax.swing.JButton registerBtn;
-    private javax.swing.JTextField usernameFld;
+    private static javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables
 }
