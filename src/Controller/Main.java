@@ -6,6 +6,8 @@ import Model.Logs;
 import Model.Product;
 import Model.User;
 import View.Frame;
+
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,11 +18,11 @@ public class Main {
 
     public SQLite sqlite;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NoSuchAlgorithmException {
         new Main().init();
     }
 
-    public void init(){
+    public void init() throws NoSuchAlgorithmException {
         // Initialize a driver object
         sqlite = new SQLite();
 
@@ -55,6 +57,7 @@ public class Main {
         sqlite.addProduct("Scanner", 10, 100.0);
 
         // Add sample users
+
         sqlite.addUser("admin", "qwerty1234" , 5);
         sqlite.addUser("manager", "qwerty1234", 4);
         sqlite.addUser("staff", "qwerty1234", 3);

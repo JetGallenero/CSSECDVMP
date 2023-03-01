@@ -5,12 +5,13 @@ import Model.Logs;
 import Model.Product;
 import Model.User;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import javax.servlet.http.HttpSession;
+import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SQLite {
     
@@ -44,6 +45,22 @@ public class SQLite {
         } catch (Exception ex) {
             System.out.print(ex);
         }
+    }
+
+    public static String getCurrentUser() {
+        String currentUser = null;
+        try {
+            currentUser = System.getProperty("user.name");
+            if (currentUser == null) {
+                currentUser = System.getenv("USER");
+                if (currentUser == null) {
+                    currentUser = System.getenv("USERNAME");
+                }
+            }
+        } catch (Exception e) {
+            // handle any exceptions here
+        }
+        return Optional.ofNullable(currentUser).orElse("Unknown");
     }
     
     public void createLogsTable() {
@@ -98,7 +115,9 @@ public class SQLite {
             System.out.print(ex);
         }
     }
-    
+
+
+
     public void dropHistoryTable() {
         String sql = "DROP TABLE IF EXISTS history;";
 
@@ -226,7 +245,7 @@ public class SQLite {
                     // Display error message
                     JOptionPane.showMessageDialog(null, "Password does not reach a minimum of 8 characters or does not contain either at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.");
                 }
-                
+
                 
             }
         } catch (Exception ex) {
@@ -276,7 +295,7 @@ public class SQLite {
         }
         return logs;
     }
-    
+
     public ArrayList<Product> getProduct(){
         String sql = "SELECT id, name, stock, price FROM product";
         ArrayList<Product> products = new ArrayList<Product>();

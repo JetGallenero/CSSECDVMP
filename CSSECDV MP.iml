@@ -10,5 +10,6 @@
     <orderEntry type="library" name="sqlite-jdbc-3.23.11" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
     <orderEntry type="library" name="CSSECDV" level="project" />
+    <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
   </component>
 </module>
