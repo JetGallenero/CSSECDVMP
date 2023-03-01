@@ -182,7 +182,7 @@ public class SQLite {
         ResultSet rs = null;
 
         try (Connection conn = DriverManager.getConnection(driverURL);
-             Statement stmt = conn.createStatement()){
+            Statement stmt = conn.createStatement()){
             String sql = "SELECT * FROM users WHERE username = ?";
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
@@ -303,7 +303,7 @@ public class SQLite {
 
     public static boolean login(String username, String password) {
         try (Connection conn = DriverManager.getConnection(driverURL);
-             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ? AND active = true")) {
+            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ? AND active = true")) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
@@ -311,6 +311,10 @@ public class SQLite {
             // Check if account exists and is active
             if (rs.next()) {
                 return true;
+            
+            // If account does not exist return error
+            } else {
+                return false;
             }
         } catch (SQLException ex) {
             System.out.print(ex);

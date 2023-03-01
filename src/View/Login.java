@@ -1,6 +1,8 @@
 
 package View;
 
+import javax.swing.JOptionPane;
+
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
@@ -86,10 +88,16 @@ public class Login extends javax.swing.JPanel {
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getText());
-            Controller.SQLite.login(username, password);
+            
+            // If user exists, go to mainNav
+            if (Controller.SQLite.login(username, password)) {
+                frame.mainNav();
+                
+            // Else, display error
+            } else {
+                   JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+            }
         }
-
-        frame.mainNav();
     }//GEN-LAST:event_loginBtnActionPerformed
 
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
