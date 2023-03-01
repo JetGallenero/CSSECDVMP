@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\build",
+    "\\build\\classes\\Controller",
+    "\\dist",
+    "\\dist\\lib",
+    "\\nbproject",
+    "\\src",
+    "\\src\\Controller",
+    "\\src\\Model",
+    "\\test"
+  ],
+  "SelectedNode": "\\src\\Controller\\Main.java",
+  "PreviewInSolutionExplorer": false
+}
