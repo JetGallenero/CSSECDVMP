@@ -55,6 +55,7 @@ public class Main {
         sqlite.addProduct("Scanner", 10, 100.0);
 
         // Add sample users
+        SQLite sqlite = new SQLite();
         sqlite.addUser("admin", "qwerty1234" , 5);
         sqlite.addUser("manager", "qwerty1234", 4);
         sqlite.addUser("staff", "qwerty1234", 3);

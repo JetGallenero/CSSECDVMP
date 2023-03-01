@@ -7,7 +7,10 @@ package View;
 
 import Controller.SQLite;
 import Model.Product;
+import Model.User;
+
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -21,18 +24,18 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
+
     public MgmtProduct(SQLite sqlite) {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
-//        UNCOMMENT TO DISABLE BUTTONS
-//        purchaseBtn.setVisible(false);
-//        addBtn.setVisible(false);
-//        editBtn.setVisible(false);
-//        deleteBtn.setVisible(false);
+
+            purchaseBtn.setVisible(true);
+            addBtn.setVisible(true);
+            editBtn.setVisible(true);
+            deleteBtn.setVisible(true);
     }
 
     public void init(){
