@@ -5,6 +5,9 @@ import Model.Logs;
 import Model.Product;
 import Model.User;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -191,16 +194,31 @@ public class SQLite {
             if (rs.next()) {
                 // Username already exists, display error message
                 JOptionPane.showMessageDialog(null, "Username is already taken. Please choose another username.");
+            
+            
             } else {
-                // Username is available, add new user
-                sql = "INSERT INTO users(username,password) VALUES(?,?)";
-                pstmt = conn.prepareStatement(sql);
-                pstmt.setString(1, username);
-                pstmt.setString(2, password);
-                pstmt.executeUpdate();
+                
+                // Username is available, check password
+                Pattern pattern = Pattern.compile("(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}");
+                Matcher matcher = pattern.matcher(password);
+                Boolean isMatch = matcher.matches();
+                
+                if (isMatch) {
+                    sql = "INSERT INTO users(username,password) VALUES(?,?)";
+                    pstmt = conn.prepareStatement(sql);
+                    pstmt.setString(1, username);
+                    pstmt.setString(2, password);
+                    pstmt.executeUpdate();
 
-                // Display success message
-                JOptionPane.showMessageDialog(null, "User registered successfully");
+                    // Display success message
+                    JOptionPane.showMessageDialog(null, "User registered successfully");
+                
+                } else {
+                    // Display error message
+                    JOptionPane.showMessageDialog(null, "Password does not reach a minimum of 8 characters or does not contain either at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.");
+                }
+                
+                
             }
         } catch (Exception ex) {
             System.out.print(ex);
@@ -308,8 +326,8 @@ public class SQLite {
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
 
-            // Check if account exists and is active
-            return rs.next(); // If account does not exist return error
+            // Check if account exists
+            return rs.next();
         } catch (SQLException ex) {
             System.out.print(ex);
         }
