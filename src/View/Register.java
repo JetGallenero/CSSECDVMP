@@ -100,14 +100,15 @@ public class Register extends javax.swing.JPanel {
         if (evt.getSource() == registerBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getText());
+            String confPassword = new String(confpassFld.getText());
 
 
             // Call the registerUser function in the controller
-            Controller.SQLite.addUser(username, password);
+            Controller.SQLite.addUser(username, password, confPassword);
             // Display success or error message
         }
     }
-    //GEN-LAST:event_registerBtnActionPerformed
+//GEN-LAST:event_registerBtnActionPerformed
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         frame.loginNav();

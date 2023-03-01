@@ -180,7 +180,7 @@ public class SQLite {
         }
     }
 
-    public static void addUser(String username, String password) {
+    public static void addUser(String username, String password, String confpassword) {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
@@ -204,14 +204,23 @@ public class SQLite {
                 Boolean isMatch = matcher.matches();
                 
                 if (isMatch) {
-                    sql = "INSERT INTO users(username,password) VALUES(?,?)";
-                    pstmt = conn.prepareStatement(sql);
-                    pstmt.setString(1, username);
-                    pstmt.setString(2, password);
-                    pstmt.executeUpdate();
+                    
+                    
+                    // Password is valid, check if same with the typed password
+                    if (password.equals(confpassword)) {
+                        sql = "INSERT INTO users(username,password) VALUES(?,?)";
+                        pstmt = conn.prepareStatement(sql);
+                        pstmt.setString(1, username);
+                        pstmt.setString(2, password);
+                        pstmt.executeUpdate();
+                        
+                        // Display success message
+                        JOptionPane.showMessageDialog(null, "User registered successfully.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Password typed does not match.");
+                    }
 
-                    // Display success message
-                    JOptionPane.showMessageDialog(null, "User registered successfully");
+                    
                 
                 } else {
                     // Display error message
