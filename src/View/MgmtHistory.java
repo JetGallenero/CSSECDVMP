@@ -8,6 +8,7 @@ package View;
 import Controller.SQLite;
 import Model.History;
 import Model.Product;
+import static View.Login.currentUser;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;

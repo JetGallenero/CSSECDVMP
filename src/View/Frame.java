@@ -1,6 +1,8 @@
 package View;
 
 import Controller.Main;
+import Controller.SQLite;
+import static View.Login.currentUser;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -240,6 +242,7 @@ public class Frame extends javax.swing.JFrame {
         Content.add(managerHomePnl, "managerHomePnl");
         Content.add(staffHomePnl, "staffHomePnl");
         Content.add(clientHomePnl, "clientHomePnl");
+        
         
         this.setVisible(true);
     }
