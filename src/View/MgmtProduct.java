@@ -32,17 +32,22 @@ public class MgmtProduct extends javax.swing.JPanel {
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
-        String username = Login.currentUser;
-        User currentUser = SQLite.getUser(username);
-
-        if (currentUser != null && currentUser.getRole() == 3) {
-            purchaseBtn.setVisible(false);
-            addBtn.setVisible(true);
-            editBtn.setVisible(true);
-            deleteBtn.setVisible(true);
-        }
-
-        }
+//        try {
+//            if (sqlite.getRole(currentUser) == 2) {
+//                addBtn.hide();
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+        
+        
+        addBtn.setVisible(true);
+        deleteBtn.setVisible(true);
+        editBtn.setVisible(true);
+        purchaseBtn.setVisible(true);
+    }
+    
+    
 
     public void init(){
         //      CLEAR TABLE
@@ -57,6 +62,15 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getName(), 
                 products.get(nCtr).getStock(), 
                 products.get(nCtr).getPrice()});
+        }
+        
+        // check what role
+        try {
+            if (sqlite.getRole(currentUser) == 2) {
+                addBtn.setVisible(false);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
     

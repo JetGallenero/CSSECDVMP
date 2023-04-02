@@ -11,7 +11,6 @@ public class Login extends javax.swing.JPanel {
 
     public static String currentUser;
     public Frame frame;
-    
 
     public Login() {
         initComponents();
@@ -99,7 +98,6 @@ public class Login extends javax.swing.JPanel {
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
 
 
-
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getPassword());
@@ -109,6 +107,8 @@ public class Login extends javax.swing.JPanel {
             if (user.getSuccess() == true) {
                 frame.mainNav();
                 System.out.println("Role is: " + user.getRole());
+                currentUser = user.getUsername();
+                
             } else {
                 JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
             }
