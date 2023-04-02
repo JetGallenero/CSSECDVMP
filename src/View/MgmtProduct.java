@@ -35,9 +35,9 @@ public class MgmtProduct extends javax.swing.JPanel {
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
 
-        System.out.println("Current user: " + SQLite.getRole(Login.currentUser));
-        if (currentUser != null && SQLite.getRole(Login.currentUser) == 3) {
-            purchaseBtn.setVisible(false);
+
+        if (SQLite.getRole(Login.currentUser) == 3) {
+            purchaseBtn.setEnabled(false);
             addBtn.setVisible(true);
             editBtn.setVisible(true);
             deleteBtn.setVisible(true);
@@ -119,7 +119,11 @@ public class MgmtProduct extends javax.swing.JPanel {
         purchaseBtn.setText("PURCHASE");
         purchaseBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                purchaseBtnActionPerformed(evt);
+                try {
+                    purchaseBtnActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -183,7 +187,8 @@ public class MgmtProduct extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseBtnActionPerformed
+    private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_purchaseBtnActionPerformed
+        System.out.println("Current user: " + SQLite.getCurrentUser(Login.currentUser));
         if(table.getSelectedRow() >= 0){
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT STOCK");
@@ -197,6 +202,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             if (result == JOptionPane.OK_OPTION) {
                 System.out.println(stockFld.getText());
             }
+
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
 

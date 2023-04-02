@@ -183,6 +183,7 @@ public class StaffHome extends javax.swing.JPanel {
         logsBtn.setForeground(Color.black);
         contentView.show(Content, "mgmtProduct");
         System.out.println("Current user: " + SQLite.getRole(Login.currentUser));
+        System.out.println("Current user: " + SQLite.getCurrentUser(Login.currentUser));
     }//GEN-LAST:event_productsBtnActionPerformed
 
     private void historyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyBtnActionPerformed
