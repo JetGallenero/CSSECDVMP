@@ -103,22 +103,31 @@ public class Login extends javax.swing.JPanel {
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getPassword());
-
-            // If user exists, go to mainNav
-            if (Controller.SQLite.login(username, password)) {
-                currentUser = username;
+            
+            User user = Controller.SQLite.login(username, password);
+            
+            if (user.getSuccess() == true) {
                 frame.mainNav();
-                Login.usernameFld.setText("");
-                Login.passwordFld.setText("");
+                System.out.println("Role is: " + user.getRole());
             } else {
-                if (attempts == 3) {
-                    Controller.SQLite.disableAccount(username);
-                    JOptionPane.showMessageDialog(null, "Your account has been disabled. Please contact the Admin to re-enable your account.");
-                } else {
-                    attempts++;
-                    JOptionPane.showMessageDialog(null, "The username or password is incorrect. You have " + (3 - attempts) + " attempts left.");
-                }
+                JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
             }
+
+//            // If user exists, go to mainNav
+//            if (Controller.SQLite.login(username, password)) {
+//                currentUser = username;
+//                frame.mainNav();
+//                Login.usernameFld.setText("");
+//                Login.passwordFld.setText("");
+//            } else {
+//                if (attempts == 3) {
+//                    Controller.SQLite.disableAccount(username);
+//                    JOptionPane.showMessageDialog(null, "Your account has been disabled. Please contact the Admin to re-enable your account.");
+//                } else {
+//                    attempts++;
+//                    JOptionPane.showMessageDialog(null, "The username or password is incorrect. You have " + (3 - attempts) + " attempts left.");
+//                }
+//            }
         }
     }
 

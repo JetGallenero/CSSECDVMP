@@ -4,7 +4,6 @@ import Model.History;
 import Model.Logs;
 import Model.Product;
 import Model.User;
-import javafx.util.Pair;
 
 import javax.swing.*;
 import java.sql.*;
@@ -445,35 +444,70 @@ public class SQLite {
         }
     }
 
-    public static boolean login(String username, String password) {
-        String sql = "SELECT id, username, password, role, locked FROM users WHERE username = ? AND password = ?";
-        User user = null;
-        String loggedInUser = null;
-        Boolean success = false;
-
-        try (Connection conn = getConnection(driverURL);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    public static User login(String username, String password) {
+        int id = -1;
+        String usernameDB = "temp";
+        String passwordDB = "temp";
+        int role = -1;
+        int locked = 0;
+        boolean success = false;
+        
+        User user;
+        
+        // check if username exists
+        String getUsernameSQL = "SELECT id, username, password, role, locked FROM users WHERE username = ?";
+        
+        try (Connection conn = getConnection(driverURL)) {
+            PreparedStatement stmt = conn.prepareStatement(getUsernameSQL);
             stmt.setString(1, username);
-            stmt.setString(2, password);
-
+            
             ResultSet rs = stmt.executeQuery();
-
+            
+            // get values of user
             if (rs.next()) {
-                int id = rs.getInt("id");
-                String uname = rs.getString("username");
-                String pass = rs.getString("password");
-                int role = rs.getInt("role");
-                int locked = rs.getInt("locked");
-
-                user = new User(id, uname, pass, role, locked);
-                loggedInUser = uname;
-                success = true;
+                id = rs.getInt("id");
+                usernameDB = rs.getString("username");
+                passwordDB = rs.getString("password");
+                role = rs.getInt("role");
+                locked = rs.getInt("locked");
             }
-        } catch (Exception ex) {
-            System.out.println(ex);
+            
+        // if username not found
+        } catch (Exception e) {
+            user = new User(id, usernameDB, role, locked, success);
+        }
+        
+        // check if password entered is correct
+        if (passwordDB.equals(password)) {
+            success = true;
+            user = new User(id, usernameDB, role, locked, success);
+        } else {
+            user = new User(id, usernameDB, role, locked, success);
         }
 
-        return new Pair<Boolean, String>(success, loggedInUser).getKey();
+//        try (Connection conn = getConnection(driverURL);
+//            PreparedStatement stmt = conn.prepareStatement(sql)) {
+//            stmt.setString(1, username);
+//            stmt.setString(2, password);
+//
+//            ResultSet rs = stmt.executeQuery();
+//
+//            if (rs.next()) {
+//                int id = rs.getInt("id");
+//                String uname = rs.getString("username");
+//                String pass = rs.getString("password");
+//                int role = rs.getInt("role");
+//                int locked = rs.getInt("locked");
+//
+//                user = new User(id, uname, pass, role, locked);
+//                loggedInUser = uname;
+//                success = true;
+//            }
+//        } catch (Exception ex) {
+//            System.out.println(ex);
+//        }
+
+        return user;
     }
 
 

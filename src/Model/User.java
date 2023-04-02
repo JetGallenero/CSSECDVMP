@@ -6,6 +6,7 @@ public class User {
     private String password;
     private int role = 2;
     private int locked = 0;
+    private boolean success = false;
     
     public User(int id, String username, String password, int role, int locked){
         this.id = id;
@@ -14,6 +15,16 @@ public class User {
         this.role = role;
         this.locked = locked;
     }
+    
+    public User(int id, String username, int role, int locked, boolean success){
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.locked = locked;
+        this.success = success;
+    }
+    
+    
     
     public int getId() {
         return id;
@@ -53,5 +64,13 @@ public class User {
 
     public void setLocked(int locked) {
         this.locked = locked;
+    }
+    
+    public boolean getSuccess() {
+        return success;
+    }
+    
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }
