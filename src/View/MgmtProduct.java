@@ -68,12 +68,14 @@ public class MgmtProduct extends javax.swing.JPanel {
         try {
             if (sqlite.getRole(currentUser) == 2) {
                 addBtn.setVisible(false);
+            } else if (sqlite.getRole(currentUser) == 3) {
+                purchaseBtn.setVisible(false);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-    
+
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
         component.setFont(new java.awt.Font("Tahoma", 0, 18));

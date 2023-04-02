@@ -1,10 +1,15 @@
 package View;
 
 import Controller.Main;
+import Controller.SQLite;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.sql.SQLException;
 import javax.swing.WindowConstants;
+
+import static View.Login.currentUser;
 
 public class Frame extends javax.swing.JFrame {
 
@@ -214,36 +219,36 @@ public class Frame extends javax.swing.JFrame {
     
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
-    
-    public void init(Main controller){
+
+    public void init(Main controller) throws SQLException {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("CSSECDV - SECURITY Svcs");
         this.setLocationRelativeTo(null);
-        
+
         this.main = controller;
         loginPnl.frame = this;
         registerPnl.frame = this;
-        
+
         adminHomePnl.init(main.sqlite);
-        clientHomePnl.init(main.sqlite);
         managerHomePnl.init(main.sqlite);
         staffHomePnl.init(main.sqlite);
-        
+        clientHomePnl.init(main.sqlite);
+
         Container.setLayout(frameView);
         Container.add(loginPnl, "loginPnl");
         Container.add(registerPnl, "registerPnl");
         Container.add(HomePnl, "homePnl");
         frameView.show(Container, "loginPnl");
-        
+
         Content.setLayout(contentView);
         Content.add(adminHomePnl, "adminHomePnl");
         Content.add(managerHomePnl, "managerHomePnl");
         Content.add(staffHomePnl, "staffHomePnl");
         Content.add(clientHomePnl, "clientHomePnl");
-        
+
         this.setVisible(true);
     }
-    
+
     public void mainNav(){
         frameView.show(Container, "homePnl");
     }

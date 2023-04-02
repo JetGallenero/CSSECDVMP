@@ -45,11 +45,11 @@ public class AdminHome extends javax.swing.JPanel {
         Content.add(this.mgmtProduct, "mgmtProduct");
         Content.add(this.mgmtLogs, "mgmtLogs");
         
-//        UNCOMMENT TO DISABLE BUTTONS
-//        historyBtn.setVisible(false);
-//        usersBtn.setVisible(false);
-//        productsBtn.setVisible(false);
-//        logsBtn.setVisible(false);
+
+      historyBtn.setVisible(false);
+      usersBtn.setVisible(true);
+      productsBtn.setVisible(false);
+      logsBtn.setVisible(true);
     }
     
     public void showPnl(String panelName){

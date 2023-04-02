@@ -6,6 +6,8 @@ import Model.Logs;
 import Model.Product;
 import Model.User;
 import View.Frame;
+
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,11 +18,11 @@ public class Main {
 
     public SQLite sqlite;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         new Main().init();
     }
 
-    public void init(){
+    public void init() throws SQLException {
         // Initialize a driver object
         sqlite = new SQLite();
 
