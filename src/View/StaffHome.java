@@ -16,22 +16,32 @@ public class StaffHome extends javax.swing.JPanel {
     public MgmtUser mgmtUser;
 
     public SQLite sqlite;
-    public MgmtProduct productManager;
+    public MgmtProduct mgmtProduct;
     private CardLayout contentView = new CardLayout();
 
     public StaffHome() {
         initComponents();
+
     }
 
     public void init(SQLite sqlite){
-        productManager = new MgmtProduct(sqlite);
+        mgmtProduct = new MgmtProduct(sqlite);
+        mgmtLogs = new MgmtLogs(sqlite);
+        mgmtHistory = new MgmtHistory(sqlite);
+        mgmtProduct = new MgmtProduct(sqlite);
+        mgmtUser = new MgmtUser(sqlite);
         this.sqlite = sqlite;
-        Content.setLayout(contentView);
-        Content.add(new Home("WELCOME STAFF!", new java.awt.Color(0,204,102)), "home");
-        Content.add(productManager, "productManager");
 
-        productsBtn.setEnabled(true);
-        historyBtn.setVisible(false);
+        Content.setLayout(contentView);
+        Content.add(new Home("WELCOME STAFF!", new java.awt.Color(153,102,255)), "home");
+        Content.add(mgmtUser, "mgmtUser");
+        Content.add(mgmtHistory, "mgmtHistory");
+        Content.add(mgmtProduct, "mgmtProduct");
+        Content.add(mgmtLogs, "mgmtLogs");
+
+
+        productsBtn.setVisible(true);
+        historyBtn.setVisible(true);
         usersBtn.setVisible(false);
         logsBtn.setVisible(false);
     }
@@ -113,14 +123,9 @@ public class StaffHome extends javax.swing.JPanel {
         });
 
 
-        String username;
-        SQLite currentUser = SQLite.getCurrentUser(username);
-        
-        if (SQLite.getRole(currentUser.getRole()) == 3) {
-            logsBtn.setVisible(true);
-        } else {
-            logsBtn.setVisible(false);
-        }
+
+
+
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -165,7 +170,7 @@ public class StaffHome extends javax.swing.JPanel {
     }//GEN-LAST:event_usersBtnActionPerformed
 
     private void productsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsBtnActionPerformed
-        productManager.init();
+        mgmtProduct.init();
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.red);
         historyBtn.setForeground(Color.black);

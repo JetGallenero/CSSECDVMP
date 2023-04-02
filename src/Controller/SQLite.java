@@ -4,8 +4,8 @@ import Model.History;
 import Model.Logs;
 import Model.Product;
 import Model.User;
+import javafx.util.Pair;
 
-import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -116,22 +116,24 @@ public class SQLite {
             System.err.println("Error disabling account: " + e.getMessage());
         }
     }
-    public static String getCurrentUser() {
-        String currentUser = null;
-        try {
-            currentUser = System.getProperty("user.name");
-            if (currentUser == null) {
-                currentUser = System.getenv("USER");
-                if (currentUser == null) {
-                    currentUser = System.getenv("USERNAME");
-                }
+    public static String getCurrentUser(String username) {
+        String sql = "SELECT * FROM users WHERE username = ?";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("username");
+            } else {
+                return null;
             }
-        } catch (Exception e) {
-            // handle any exceptions here
+        } catch (SQLException e) {
+            System.err.println("Error getting current user: " + e.getMessage());
+            return null;
         }
-        return Optional.ofNullable(currentUser).orElse("Unknown");
     }
-    
+
+
     public void createLogsTable() {
         String sql = "CREATE TABLE IF NOT EXISTS logs (\n"
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
@@ -405,29 +407,29 @@ public class SQLite {
         return users;
     }
 
-    public static User getCurrentUser(String username) {
+    public static User getUser(String username) {
         String sql = "SELECT id, username, password, role, locked FROM users WHERE username = ?";
-        User currentUser = null;
+        User user = null;
 
         try (Connection conn = getConnection(driverURL);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
-                currentUser = new User(rs.getInt("id"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getInt("role"),
-                        rs.getInt("locked"));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    user = new User(rs.getInt("id"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getInt("role"),
+                            rs.getInt("locked"));
+                }
             }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
+        } catch (Exception ex) {}
 
-        return currentUser;
+        return user;
     }
+
 
 
 
@@ -444,20 +446,37 @@ public class SQLite {
     }
 
     public static boolean login(String username, String password) {
-        try (Connection conn = getConnection(driverURL);
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username = ? AND password = ?";
+        User user = null;
+        String loggedInUser = null;
+        Boolean success = false;
 
-            // Check if account exists
-            return rs.next();
-        } catch (SQLException ex) {
-            System.out.print(ex);
+        try (Connection conn = getConnection(driverURL);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String uname = rs.getString("username");
+                String pass = rs.getString("password");
+                int role = rs.getInt("role");
+                int locked = rs.getInt("locked");
+
+                user = new User(id, uname, pass, role, locked);
+                loggedInUser = uname;
+                success = true;
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-        return false;
+
+        return new Pair<Boolean, String>(success, loggedInUser).getKey();
     }
-    
+
+
     public void removeUser(String username) {
         String sql = "DELETE FROM users WHERE username='" + username + "';";
 

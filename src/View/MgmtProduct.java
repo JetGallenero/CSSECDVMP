@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import static View.Login.currentUser;
+
 /**
  *
  * @author beepxD
@@ -31,12 +33,17 @@ public class MgmtProduct extends javax.swing.JPanel {
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
+        String username = Login.currentUser;
+        User currentUser = SQLite.getUser(username);
 
-            purchaseBtn.setVisible(true);
+        if (currentUser != null && currentUser.getRole() == 3) {
+            purchaseBtn.setVisible(false);
             addBtn.setVisible(true);
             editBtn.setVisible(true);
             deleteBtn.setVisible(true);
-    }
+        }
+
+        }
 
     public void init(){
         //      CLEAR TABLE

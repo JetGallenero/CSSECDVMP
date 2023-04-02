@@ -6,11 +6,6 @@ public class User {
     private String password;
     private int role = 2;
     private int locked = 0;
-
-    public User(String username, String password){
-        this.username = username;
-        this.password = password;
-    }
     
     public User(int id, String username, String password, int role, int locked){
         this.id = id;

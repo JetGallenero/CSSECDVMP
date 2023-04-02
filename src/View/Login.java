@@ -1,12 +1,17 @@
 
 package View;
 
+import Controller.SQLite;
+import Model.User;
+
 import javax.swing.JOptionPane;
 
 
 public class Login extends javax.swing.JPanel {
 
+    public static String currentUser;
     public Frame frame;
+    
 
     public Login() {
         initComponents();
@@ -91,14 +96,17 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
+
+
+
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getPassword());
 
             // If user exists, go to mainNav
             if (Controller.SQLite.login(username, password)) {
+                currentUser = username;
                 frame.mainNav();
                 Login.usernameFld.setText("");
                 Login.passwordFld.setText("");
@@ -113,6 +121,7 @@ public class Login extends javax.swing.JPanel {
             }
         }
     }
+
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         frame.registerNav();
         Login.usernameFld.setText("");
