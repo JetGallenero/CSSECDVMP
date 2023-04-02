@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Cruz_Gallenero_SecDev">
+    <output-path>$USER_HOME$/Desktop</output-path>
+    <root id="archive" name="Cruz_Gallenero_SecDev.jar" />
+  </artifact>
+</component>
