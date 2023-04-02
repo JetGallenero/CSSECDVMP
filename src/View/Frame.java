@@ -4,6 +4,7 @@ import Controller.Main;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.sql.SQLException;
 import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
@@ -215,7 +216,7 @@ public class Frame extends javax.swing.JFrame {
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
     
-    public void init(Main controller){
+    public void init(Main controller) throws SQLException {
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("CSSECDV - SECURITY Svcs");
         this.setLocationRelativeTo(null);

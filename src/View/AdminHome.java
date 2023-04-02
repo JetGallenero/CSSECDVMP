@@ -12,6 +12,7 @@ import Model.Product;
 import Model.User;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,7 +33,7 @@ public class AdminHome extends javax.swing.JPanel {
         initComponents();
     }
     
-    public void init(SQLite sqlite){
+    public void init(SQLite sqlite) throws SQLException {
         mgmtHistory = new MgmtHistory(sqlite);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtProduct = new MgmtProduct(sqlite);

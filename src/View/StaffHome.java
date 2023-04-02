@@ -5,6 +5,7 @@ import Model.Product;
 import Model.User;
 
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,7 +25,7 @@ public class StaffHome extends javax.swing.JPanel {
 
     }
 
-    public void init(SQLite sqlite){
+    public void init(SQLite sqlite) throws SQLException {
         mgmtProduct = new MgmtProduct(sqlite);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtHistory = new MgmtHistory(sqlite);
@@ -84,7 +85,11 @@ public class StaffHome extends javax.swing.JPanel {
         productsBtn.setText("PRODUCTS");
         productsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                productsBtnActionPerformed(evt);
+                try {
+                    productsBtnActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -167,15 +172,17 @@ public class StaffHome extends javax.swing.JPanel {
         historyBtn.setForeground(Color.black);
         logsBtn.setForeground(Color.black);
         contentView.show(Content, "mgmtUser");
+
     }//GEN-LAST:event_usersBtnActionPerformed
 
-    private void productsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsBtnActionPerformed
+    private void productsBtnActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_productsBtnActionPerformed
         mgmtProduct.init();
         usersBtn.setForeground(Color.black);
         productsBtn.setForeground(Color.red);
         historyBtn.setForeground(Color.black);
         logsBtn.setForeground(Color.black);
         contentView.show(Content, "mgmtProduct");
+        System.out.println("Current user: " + SQLite.getRole(Login.currentUser));
     }//GEN-LAST:event_productsBtnActionPerformed
 
     private void historyBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_historyBtnActionPerformed

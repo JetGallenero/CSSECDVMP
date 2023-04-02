@@ -118,6 +118,7 @@ public class Login extends javax.swing.JPanel {
                     attempts++;
                     JOptionPane.showMessageDialog(null, "The username or password is incorrect. You have " + (3 - attempts) + " attempts left.");
                 }
+
             }
         }
     }

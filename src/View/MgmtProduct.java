@@ -9,6 +9,7 @@ import Controller.SQLite;
 import Model.Product;
 import Model.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
@@ -27,16 +28,15 @@ public class MgmtProduct extends javax.swing.JPanel {
     public SQLite sqlite;
     public DefaultTableModel tableModel;
 
-    public MgmtProduct(SQLite sqlite) {
+    public MgmtProduct(SQLite sqlite) throws SQLException {
         initComponents();
         this.sqlite = sqlite;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
-        String username = Login.currentUser;
-        User currentUser = SQLite.getUser(username);
 
-        if (currentUser != null && currentUser.getRole() == 3) {
+        System.out.println("Current user: " + SQLite.getRole(Login.currentUser));
+        if (currentUser != null && SQLite.getRole(Login.currentUser) == 3) {
             purchaseBtn.setVisible(false);
             addBtn.setVisible(true);
             editBtn.setVisible(true);
