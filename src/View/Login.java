@@ -3,6 +3,7 @@ package View;
 
 import javax.swing.JOptionPane;
 
+
 public class Login extends javax.swing.JPanel {
 
     public Frame frame;
@@ -89,24 +90,29 @@ public class Login extends javax.swing.JPanel {
                 .addContainerGap(126, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+
+
+    private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
-            String password = new String(passwordFld.getText());
+            String password = new String(passwordFld.getPassword());
 
             // If user exists, go to mainNav
             if (Controller.SQLite.login(username, password)) {
                 frame.mainNav();
                 Login.usernameFld.setText("");
                 Login.passwordFld.setText("");
-
-            // Else, display error
             } else {
-                   JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                if (attempts == 3) {
+                    Controller.SQLite.disableAccount(username);
+                    JOptionPane.showMessageDialog(null, "Your account has been disabled. Please contact the Admin to re-enable your account.");
+                } else {
+                    attempts++;
+                    JOptionPane.showMessageDialog(null, "The username or password is incorrect. You have " + (3 - attempts) + " attempts left.");
+                }
             }
         }
-    }//GEN-LAST:event_loginBtnActionPerformed
-
+    }
     private void registerBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerBtnActionPerformed
         frame.registerNav();
         Login.usernameFld.setText("");
@@ -117,8 +123,10 @@ public class Login extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton loginBtn;
-    static javax.swing.JTextField passwordFld;
+    static javax.swing.JPasswordField passwordFld;
     private javax.swing.JButton registerBtn;
     static javax.swing.JTextField usernameFld;
     // End of variables declaration//GEN-END:variables
+    private int attempts = 0;
+
 }
