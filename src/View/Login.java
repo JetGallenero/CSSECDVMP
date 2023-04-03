@@ -4,6 +4,7 @@ package View;
 import javax.swing.JOptionPane;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Login extends javax.swing.JPanel {
@@ -118,6 +119,9 @@ public class Login extends javax.swing.JPanel {
                 frame.hideButtons(frame.getCurrentUser(username).getRole());
                 System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
+                // role binary
+                int currentrole = 0;
+                
                 byte[] settings = new byte[4];
                 byte[] staffsettings = new byte[4];
                 byte[] clientsettings = new byte[4];
@@ -131,11 +135,13 @@ public class Login extends javax.swing.JPanel {
                     clientsettings[1] = 1;
                     clientsettings[2] = 1;
                     clientsettings[3] = 1;
+                    currentrole = 2;
                 } else if (frame.getCurrentUser(username).getRole() == 3) { //staff
                     settings[2] = 1;
                     staffsettings[1] = 1;
                     staffsettings[2] = 1;
                     staffsettings[3] = 1;
+                    currentrole = 3;
                 }
                 else if (frame.getCurrentUser(username).getRole() == 4) { //manager
                     settings[1] = 1;
@@ -143,9 +149,20 @@ public class Login extends javax.swing.JPanel {
                     managersettingsProds[1] = 1;
                     managersettingsProds[2] = 1;
                     managersettingsProds[3] = 1;
+                    currentrole = 4;
                 }
                 else if (frame.getCurrentUser(username).getRole() == 5) { //admin
                     settings[1] = 1;
+                    currentrole = 5;
+                }
+                
+                //write binary file for current user role
+                try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("currentrole.bin"))) {
+                    dos.writeUTF(username);
+                    dos.writeInt(currentrole);
+                    dos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
 
 
@@ -195,7 +212,6 @@ public class Login extends javax.swing.JPanel {
                     frame.loginAttempt(username);
                     JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
                 }
-                
             }
         }
     }//GEN-LAST:event_loginBtnActionPerformed

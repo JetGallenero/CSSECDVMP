@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.DataInputStream;
 
 /**
  *
@@ -45,19 +48,88 @@ public class MgmtHistory extends javax.swing.JPanel {
             tableModel.removeRow(0);
         }
         
+        
+        // get current role
+        int currentrole = 0;
+        String username = "temp";
+        
+        try (DataInputStream dis = new DataInputStream(new FileInputStream("currentrole.bin"))){
+            username = dis.readUTF();
+            currentrole = dis.readInt();
+            dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        // condition for role contents
+        
+        
 //      LOAD CONTENTS
         ArrayList<History> history = sqlite.getHistory();
         for(int nCtr = 0; nCtr < history.size(); nCtr++){
             Product product = sqlite.getProduct(history.get(nCtr).getName());
-            tableModel.addRow(new Object[]{
-                history.get(nCtr).getUsername(), 
-                history.get(nCtr).getName(), 
-                history.get(nCtr).getStock(), 
-                product.getPrice(), 
-                product.getPrice() * history.get(nCtr).getStock(), 
-                history.get(nCtr).getTimestamp()
-            });
+            
+            if (currentrole == 2) {
+                if(history.get(nCtr).getName().equals(username)) {
+                    tableModel.addRow(new Object[]{
+                        history.get(nCtr).getUsername(), 
+                        history.get(nCtr).getName(), 
+                        history.get(nCtr).getStock(), 
+                        product.getPrice(), 
+                        product.getPrice() * history.get(nCtr).getStock(), 
+                        history.get(nCtr).getTimestamp()
+                    });
+                }
+            } else if (currentrole == 4) {
+                tableModel.addRow(new Object[]{
+                    history.get(nCtr).getUsername(), 
+                    history.get(nCtr).getName(), 
+                    history.get(nCtr).getStock(), 
+                    product.getPrice(), 
+                    product.getPrice() * history.get(nCtr).getStock(), 
+                    history.get(nCtr).getTimestamp()
+                });
+            }
+            
+            
+            
         }
+        
+        
+        
+//        switch(currentrole) {
+//            case 2: // client
+//                adminBtn.setVisible(false);
+//                managerBtn.setVisible(false);
+//                staffBtn.setVisible(false);
+//                clientBtn.setVisible(true);
+//                contentView.show(Content, "clientHomePnl");
+//                break;
+//            case 3: // staff
+//                adminBtn.setVisible(false);
+//                managerBtn.setVisible(false);
+//                clientBtn.setVisible(false);
+//                staffBtn.setVisible(true);
+//                contentView.show(Content, "staffHomePnl");
+//                break;
+//            case 4: // manager
+//                adminBtn.setVisible(false);
+//                staffBtn.setVisible(false);
+//                clientBtn.setVisible(false);
+//                managerBtn.setVisible(true);
+//                contentView.show(Content, "managerHomePnl");
+//                break;
+//            case 5: // admin
+//                staffBtn.setVisible(false);
+//                clientBtn.setVisible(false);
+//                managerBtn.setVisible(false);
+//                adminBtn.setVisible(true);
+//                contentView.show(Content, "adminHomePnl");
+//                break;
+//
+//        }
+        
+        System.out.println("this is the current role " + currentrole);
     }
     
     public void designer(JTextField component, String text){
