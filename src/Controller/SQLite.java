@@ -5,7 +5,6 @@ import Model.Logs;
 import Model.Product;
 import Model.User;
 
-import javax.servlet.http.HttpSession;
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -333,6 +332,27 @@ public class SQLite {
             }
         } catch (Exception ex) {}
         return users;
+    }
+    
+    public User getUser(String username){
+        User user = new User();
+        
+        String sql = "SELECT id, username, password, role, locked WHERE username = ?";
+        
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)){
+            
+            while (rs.next()) {
+                user.setId(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+                user.setLocked(rs.getInt("locked"));
+            }
+        } catch (Exception ex) {}
+        
+        return user;
     }
 
     public void addUser(String username, String password, int role) {

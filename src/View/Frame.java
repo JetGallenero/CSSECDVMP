@@ -259,6 +259,25 @@ public class Frame extends javax.swing.JFrame {
     public void registerAction(String username, String password, String confpass){
         main.sqlite.addUser(username, password, confpass);
     }
+    
+    public boolean loginAuth(String username, String password) {
+        return main.sqlite.login(username, password);
+    }
+    
+    public Model.User getCurrentUser(String username) {
+        return main.sqlite.getUser(username);
+    }
+    
+    public void hideButtons(int role) {
+        switch(role) {
+            case 2:
+                adminBtn.setVisible(false);
+                managerBtn.setVisible(false);
+                staffBtn.setVisible(false);
+                contentView.show(Content, "clientHomePnl");
+                break;                        
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Container;

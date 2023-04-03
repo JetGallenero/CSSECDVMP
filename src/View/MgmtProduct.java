@@ -10,7 +10,6 @@ import Model.Product;
 import Model.User;
 
 import java.util.ArrayList;
-import javax.servlet.http.HttpServletRequest;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;

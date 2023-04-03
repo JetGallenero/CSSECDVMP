@@ -95,14 +95,16 @@ public class Login extends javax.swing.JPanel {
             String password = new String(passwordFld.getText());
 
             // If user exists, go to mainNav
-            if (Controller.SQLite.login(username, password)) {
+            if (frame.loginAuth(username, password)) {
                 frame.mainNav();
                 Login.usernameFld.setText("");
                 Login.passwordFld.setText("");
+                
+                frame.hideButtons(frame.getCurrentUser(username).getRole());
 
             // Else, display error
             } else {
-                   JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
             }
         }
     }//GEN-LAST:event_loginBtnActionPerformed
