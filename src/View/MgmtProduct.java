@@ -9,6 +9,7 @@ import Controller.SQLite;
 import Model.Product;
 import Model.User;
 
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +55,18 @@ public class MgmtProduct extends javax.swing.JPanel {
                     products.get(nCtr).getPrice()});
         }
 
+        // get current role
+        int currentrole = 0;
+        String username = "temp";
+
+        try (DataInputStream dis = new DataInputStream(new FileInputStream("currentrole.bin"))){
+            username = dis.readUTF();
+            currentrole = dis.readInt();
+            dis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         byte[] managersettingsProds = new byte[4];
         byte[] staffsettings = new byte[4];
         byte[] clientsettings = new byte[4];
@@ -83,22 +96,29 @@ public class MgmtProduct extends javax.swing.JPanel {
         }
 
         // Show/Hide staff buttons based on the staffsettings.bin file
-        purchaseBtn.setVisible(staffsettings[0] == 1);
-        addBtn.setVisible(staffsettings[1] == 1);
-        editBtn.setVisible(staffsettings[2] == 1);
-        deleteBtn.setVisible(staffsettings[3] == 1);
 
-        // Show/Hide manager buttons based on the managersettingsProds.bin file
-        purchaseBtn.setVisible(managersettingsProds[0] == 1);
-        addBtn.setVisible(managersettingsProds[1] == 1);
-        editBtn.setVisible(managersettingsProds[2] == 1);
-        deleteBtn.setVisible(managersettingsProds[3] == 1);
+        if(currentrole ==4 ) {
+            // Show/Hide manager buttons based on the managersettingsProds.bin file
+            purchaseBtn.setVisible(managersettingsProds[0] == 1);
+            addBtn.setVisible(managersettingsProds[1] == 1);
+            editBtn.setVisible(managersettingsProds[2] == 1);
+            deleteBtn.setVisible(managersettingsProds[3] == 1);
+        }
 
-        // Show/Hide client buttons based on the clientsettings.bin file
-        purchaseBtn.setVisible(clientsettings[0] == 1);
-        addBtn.setVisible(clientsettings[1] == 1);
-        editBtn.setVisible(clientsettings[2] == 1);
-        deleteBtn.setVisible(clientsettings[3] == 1);
+        if(currentrole ==2 ) {
+            // Show/Hide client buttons based on the clientsettings.bin file
+            purchaseBtn.setVisible(clientsettings[0] == 1);
+            addBtn.setVisible(clientsettings[1] == 1);
+            editBtn.setVisible(clientsettings[2] == 1);
+            deleteBtn.setVisible(clientsettings[3] == 1);
+        }
+
+        if(currentrole ==3 ) {
+            purchaseBtn.setVisible(staffsettings[0] == 1);
+            addBtn.setVisible(staffsettings[1] == 1);
+            editBtn.setVisible(staffsettings[2] == 1);
+            deleteBtn.setVisible(staffsettings[3] == 1);
+        }
     }
 
 
@@ -243,7 +263,7 @@ public class MgmtProduct extends javax.swing.JPanel {
         
     }//GEN-LAST:event_purchaseBtnActionPerformed
 
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {
         JTextField nameFld = new JTextField();
         JTextField stockFld = new JTextField();
         JTextField priceFld = new JTextField();
@@ -253,19 +273,28 @@ public class MgmtProduct extends javax.swing.JPanel {
         designer(priceFld, "PRODUCT PRICE");
 
         Object[] message = {
-            "Insert New Product Details:", nameFld, stockFld, priceFld
+                "Insert New Product Details:", nameFld, stockFld, priceFld
         };
 
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
-            System.out.println(nameFld.getText());
-            System.out.println(stockFld.getText());
-            System.out.println(priceFld.getText());
-        }
-    }//GEN-LAST:event_addBtnActionPerformed
+            String name = nameFld.getText();
+            int stock = Integer.parseInt(stockFld.getText());
+            double price = Double.parseDouble(priceFld.getText());
 
-    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+            // Create a new Product object with the entered information
+            Product product = new Product(name, stock, (float) price);
+
+            // Use the SQLite object to add the product to the database
+            sqlite.addProduct(product);
+
+            // Refresh the table to display the updated information
+            init();
+        }
+    }
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {
         if(table.getSelectedRow() >= 0){
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
             JTextField stockFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 1) + "");
@@ -276,28 +305,45 @@ public class MgmtProduct extends javax.swing.JPanel {
             designer(priceFld, "PRODUCT PRICE");
 
             Object[] message = {
-                "Edit Product Details:", nameFld, stockFld, priceFld
+                    "Edit Product Details:", nameFld, stockFld, priceFld
             };
 
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
-                System.out.println(nameFld.getText());
-                System.out.println(stockFld.getText());
-                System.out.println(priceFld.getText());
+                // Retrieve the new values from the text fields
+                String name = nameFld.getText();
+                int stock = Integer.parseInt(stockFld.getText());
+                double price = Double.parseDouble(priceFld.getText());
+
+                // Retrieve the id of the selected product from the table
+                int id = table.getSelectedRow() + 1;
+
+                // Create a new Product object with the updated information
+                Product product = new Product(id, name, stock, (float) price);
+
+                // Use the SQLite object to update the corresponding record in the database
+                sqlite.updateProduct(product);
+
+                // Refresh the table to display the updated information
+                init();
             }
         }
-    }//GEN-LAST:event_editBtnActionPerformed
+    }
+//GEN-LAST:event_editBtnActionPerformed
 
-    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {
         if(table.getSelectedRow() >= 0){
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
-            
+
             if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                String name = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+                sqlite.deleteProduct(name);
+                init();
             }
         }
-    }//GEN-LAST:event_deleteBtnActionPerformed
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
