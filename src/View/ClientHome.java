@@ -48,6 +48,10 @@ public class ClientHome extends javax.swing.JPanel {
         Content.add(mgmtLogs, "mgmtLogs");
 
 // Read the binary file and store the visibility settings in a byte array
+        
+    }
+    
+    public void showPnl(String panelName){
         byte[] settings = new byte[4];
         try {
             FileInputStream fis = new FileInputStream("settings.bin");
@@ -63,9 +67,8 @@ public class ClientHome extends javax.swing.JPanel {
         historyBtn.setVisible(settings[1] == 1);
         productsBtn.setVisible(settings[2] == 1);
         logsBtn.setVisible(settings[3] == 1);
-    }
-    
-    public void showPnl(String panelName){
+        
+        
         contentView.show(Content, panelName);
     }
 

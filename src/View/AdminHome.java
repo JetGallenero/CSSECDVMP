@@ -47,21 +47,7 @@ public class AdminHome extends javax.swing.JPanel {
         Content.add(this.mgmtProduct, "mgmtProduct");
         Content.add(this.mgmtLogs, "mgmtLogs");
 
-        byte[] settings = new byte[4];
-        try {
-            FileInputStream fis = new FileInputStream("settings.bin");
-            fis.read(settings);
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        // Show/Hide buttons based on the binary file settings
-        usersBtn.setVisible(settings[0] == 1);
-        historyBtn.setVisible(settings[1] == 1);
-        productsBtn.setVisible(settings[2] == 1);
-        logsBtn.setVisible(settings[3] == 1);
+        
 
 //        UNCOMMENT TO DISABLE BUTTONS
 //        historyBtn.setVisible(false);
@@ -71,7 +57,25 @@ public class AdminHome extends javax.swing.JPanel {
     }
 
     public void showPnl(String panelName){
+        byte[] settings = new byte[4];
+        try {
+            FileInputStream fis = new FileInputStream("settings.bin");
+            fis.read(settings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        
+
+        // Show/Hide buttons based on the binary file settings
+        usersBtn.setVisible(settings[0] == 1);
+        historyBtn.setVisible(settings[1] == 1);
+        productsBtn.setVisible(settings[2] == 1);
+        logsBtn.setVisible(settings[3] == 1);
+        
         contentView.show(Content, panelName);
+        
     }
 
     /**

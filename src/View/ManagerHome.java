@@ -47,6 +47,10 @@ public class ManagerHome extends javax.swing.JPanel {
         Content.add(mgmtProduct, "mgmtProduct");
         Content.add(mgmtLogs, "mgmtLogs");
 
+        
+    }
+    
+    public void showPnl(String panelName){
         byte[] settings = new byte[4];
         try {
             FileInputStream fis = new FileInputStream("settings.bin");
@@ -62,9 +66,7 @@ public class ManagerHome extends javax.swing.JPanel {
         historyBtn.setVisible(settings[1] == 1);
         productsBtn.setVisible(settings[2] == 1);
         logsBtn.setVisible(settings[3] == 1);
-    }
-    
-    public void showPnl(String panelName){
+        
         contentView.show(Content, panelName);
     }
 

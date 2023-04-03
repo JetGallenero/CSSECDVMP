@@ -615,6 +615,10 @@ public class SQLite {
             pstmt.setString(2, productName);
             pstmt.executeUpdate();
             System.out.println("Stock of " + productName + " updated to " + newStock);
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+    }
 
     public void addProduct(Product product) {
         String sql = "INSERT INTO product (name, stock, price) VALUES (?, ?, ?);";

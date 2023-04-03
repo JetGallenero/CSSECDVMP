@@ -6,7 +6,9 @@ import Controller.SQLite;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.io.File;
 import javax.swing.WindowConstants;
+
 
 public class Frame extends javax.swing.JFrame {
 
@@ -202,8 +204,29 @@ public class Frame extends javax.swing.JFrame {
     }//GEN-LAST:event_clientBtnActionPerformed
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
+        File del = new File("settings.bin");
+        del.delete();
+        
+        del = new File("clientsettings.bin");
+        del.delete();
+        
+        del = new File("clientsettingshist.bin");
+        del.delete();
+                
+        del = new File("currenrole.bin");
+        del.delete();
+        
+        del = new File("managersettingsHist.bin");
+        del.delete();
+        
+        del = new File("managersettingsProds.bin");
+        del.delete();
+        
+        del = new File("staffsettings.bin");
+        del.delete();
+        
         frameView.show(Container, "loginPnl");
-
+        
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;

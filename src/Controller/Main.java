@@ -28,10 +28,10 @@ public class Main {
         sqlite.createNewDatabase();
 
         // Drop users table if needed\
-//        sqlite.dropHistoryTable();
-//       sqlite.dropLogsTable();
-//       sqlite.dropProductTable();
-//       sqlite.dropUserTable();
+        sqlite.dropHistoryTable();
+       sqlite.dropLogsTable();
+       sqlite.dropProductTable();
+       sqlite.dropUserTable();
 
         // Create users table if not exist
         sqlite.createHistoryTable();
@@ -57,10 +57,10 @@ public class Main {
         // Add sample users
         SQLite sqlite = new SQLite();
        sqlite.addUser("admin", "qwerty1234" , 5);
-      // sqlite.addUser("manager", "qwerty1234", 4);
-//        sqlite.addUser("staff", "qwerty1234", 3);
-//        sqlite.addUser("client1", "qwerty1234", 2);
-//        sqlite.addUser("client2", "qwerty1234", 2);
+       sqlite.addUser("manager", "qwerty1234", 4);
+        sqlite.addUser("staff", "qwerty1234", 3);
+        sqlite.addUser("client1", "qwerty1234", 2);
+        sqlite.addUser("client2", "qwerty1234", 2);
 
 
         // Get users
