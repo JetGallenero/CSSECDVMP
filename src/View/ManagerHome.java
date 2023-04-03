@@ -12,6 +12,8 @@ import Model.Product;
 import Model.User;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -31,25 +33,35 @@ public class ManagerHome extends javax.swing.JPanel {
     public ManagerHome() {
         initComponents();
     }
-    
+
     public void init(SQLite sqlite){
         mgmtHistory = new MgmtHistory(sqlite);
         mgmtLogs = new MgmtLogs(sqlite);
         mgmtProduct = new MgmtProduct(sqlite);
         mgmtUser = new MgmtUser(sqlite);
-    
+
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME MANAGER!", new java.awt.Color(153,102,255)), "home");
         Content.add(mgmtUser, "mgmtUser");
         Content.add(mgmtHistory, "mgmtHistory");
         Content.add(mgmtProduct, "mgmtProduct");
         Content.add(mgmtLogs, "mgmtLogs");
-        
-//        UNCOMMENT TO DISABLE BUTTONS
-//        historyBtn.setVisible(false);
-//        usersBtn.setVisible(false);
-//        productsBtn.setVisible(false);
-//        logsBtn.setVisible(false);
+
+        // Read the binary file and store the visibility settings in a byte array
+        byte[] settings = new byte[4];
+        try {
+            FileInputStream fis = new FileInputStream("settings.bin");
+            fis.read(settings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Show/Hide buttons based on the binary file settings
+        usersBtn.setVisible(settings[0] == 1);
+        historyBtn.setVisible(settings[1] == 1);
+        productsBtn.setVisible(settings[2] == 1);
+        logsBtn.setVisible(settings[3] == 1);
     }
     
     public void showPnl(String panelName){

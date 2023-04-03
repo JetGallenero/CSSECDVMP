@@ -2,6 +2,9 @@
 package View;
 
 import javax.swing.JOptionPane;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class Login extends javax.swing.JPanel {
 
@@ -103,7 +106,33 @@ public class Login extends javax.swing.JPanel {
                 frame.hideButtons(frame.getCurrentUser(username).getRole());
                 System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
-            // Else, display error
+                byte[] settings = new byte[4];
+                if (frame.getCurrentUser(username).getRole() == 2) {
+                    settings[2] = 1;
+                } else if (frame.getCurrentUser(username).getRole() == 3) {
+                    settings[2] = 1;
+                }
+                else if (frame.getCurrentUser(username).getRole() == 4) {
+                    settings[0] = 1;
+                    settings[1] = 1;
+                }
+                else if (frame.getCurrentUser(username).getRole() == 5) {
+                    settings[0] = 1;
+                    settings[1] = 1;
+                }
+                // Add more conditions for other roles if needed
+
+                // Write the binary file
+                try {
+                    FileOutputStream fos = new FileOutputStream("settings.bin");
+                    fos.write(settings);
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+                // Else, display error
             } else {
                 JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
             }
