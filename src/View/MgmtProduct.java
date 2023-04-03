@@ -225,6 +225,8 @@ public class MgmtProduct extends javax.swing.JPanel {
                 System.out.println(stockFld.getText());
             }
         }
+        
+        
     }//GEN-LAST:event_purchaseBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed

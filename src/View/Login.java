@@ -104,115 +104,117 @@ public class Login extends javax.swing.JPanel {
                 frame.loginNav();
                 showIncorrectPrompt = 1;
                 JOptionPane.showMessageDialog(null, "Your account is locked. Contact an administrator.");
-            }
-
-            // If user exists, go to mainNav
-            if (frame.loginAuth(username, password)) {
-                // check if locked na ba ung account
-                frame.mainNav();
-
-                Login.usernameFld.setText("");
-                Login.passwordFld.setText("");
-
-                frame.resetAttempts(username);
-
-                frame.hideButtons(frame.getCurrentUser(username).getRole());
-                System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
-
-                // role binary
-                int currentrole = 0;
-                
-                byte[] settings = new byte[4];
-                byte[] staffsettings = new byte[4];
-                byte[] clientsettings = new byte[4];
-                byte[] adminsettings = new byte[4];
-                byte[] managersettingsHist = new byte[4];
-                byte[] managersettingsProds= new byte[4];
-
-                if (frame.getCurrentUser(username).getRole() == 2) {
-                    settings[1] = 1;
-                    settings[2] = 1;
-                    clientsettings[1] = 1;
-                    clientsettings[2] = 1;
-                    clientsettings[3] = 1;
-                    currentrole = 2;
-                } else if (frame.getCurrentUser(username).getRole() == 3) { //staff
-                    settings[2] = 1;
-                    staffsettings[1] = 1;
-                    staffsettings[2] = 1;
-                    staffsettings[3] = 1;
-                    currentrole = 3;
-                }
-                else if (frame.getCurrentUser(username).getRole() == 4) { //manager
-                    settings[1] = 1;
-                    settings[2] = 1;
-                    managersettingsProds[1] = 1;
-                    managersettingsProds[2] = 1;
-                    managersettingsProds[3] = 1;
-                    currentrole = 4;
-                }
-                else if (frame.getCurrentUser(username).getRole() == 5) { //admin
-                    settings[1] = 1;
-                    currentrole = 5;
-                }
-                
-                //write binary file for current user role
-                try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("currentrole.bin"))) {
-                    dos.writeUTF(username);
-                    dos.writeInt(currentrole);
-                    dos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-                // Write the binary file
-                try {
-                    FileOutputStream fos = new FileOutputStream("settings.bin");
-                    fos.write(settings);
-                    fos.close();
-                    System.out.println("settings.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    FileOutputStream fos = new FileOutputStream("staffsettings.bin");
-                    fos.write(staffsettings);
-                    fos.close();
-                    System.out.println("managersettingsHist.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    FileOutputStream fos = new FileOutputStream("managersettingsHist.bin");
-                    fos.write(managersettingsHist);
-                    fos.close();
-                    System.out.println("managersettingsHist.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    FileOutputStream fos = new FileOutputStream("managersettingsProds.bin");
-                    fos.write(managersettingsProds);
-                    fos.close();
-                    System.out.println("managersettingsProds.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                
-                
-
-
-                // Else, display error
             } else {
-                if (showIncorrectPrompt == 0) {
-                    frame.loginAttempt(username);
-                    JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                // If user exists, go to mainNav
+                if (frame.loginAuth(username, password)) {
+                    // check if locked na ba ung account
+                    frame.mainNav();
+
+                    Login.usernameFld.setText("");
+                    Login.passwordFld.setText("");
+
+                    frame.resetAttempts(username);
+
+                    frame.hideButtons(frame.getCurrentUser(username).getRole());
+                    System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
+
+                    // role binary
+                    int currentrole = 0;
+
+                    byte[] settings = new byte[4];
+                    byte[] staffsettings = new byte[4];
+                    byte[] clientsettings = new byte[4];
+                    byte[] adminsettings = new byte[4];
+                    byte[] managersettingsHist = new byte[4];
+                    byte[] managersettingsProds= new byte[4];
+
+                    if (frame.getCurrentUser(username).getRole() == 2) {
+                        settings[1] = 1;
+                        settings[2] = 1;
+                        clientsettings[1] = 1;
+                        clientsettings[2] = 1;
+                        clientsettings[3] = 1;
+                        currentrole = 2;
+                    } else if (frame.getCurrentUser(username).getRole() == 3) { //staff
+                        settings[2] = 1;
+                        staffsettings[1] = 1;
+                        staffsettings[2] = 1;
+                        staffsettings[3] = 1;
+                        currentrole = 3;
+                    }
+                    else if (frame.getCurrentUser(username).getRole() == 4) { //manager
+                        settings[1] = 1;
+                        settings[2] = 1;
+                        managersettingsProds[1] = 1;
+                        managersettingsProds[2] = 1;
+                        managersettingsProds[3] = 1;
+                        currentrole = 4;
+                    }
+                    else if (frame.getCurrentUser(username).getRole() == 5) { //admin
+                        settings[1] = 1;
+                        currentrole = 5;
+                    }
+
+                    //write binary file for current user role
+                    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream("currentrole.bin"))) {
+                        dos.writeUTF(username);
+                        dos.writeInt(currentrole);
+                        dos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    // Write the binary file
+                    try {
+                        FileOutputStream fos = new FileOutputStream("settings.bin");
+                        fos.write(settings);
+                        fos.close();
+                        System.out.println("settings.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("staffsettings.bin");
+                        fos.write(staffsettings);
+                        fos.close();
+                        System.out.println("managersettingsHist.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("managersettingsHist.bin");
+                        fos.write(managersettingsHist);
+                        fos.close();
+                        System.out.println("managersettingsHist.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("managersettingsProds.bin");
+                        fos.write(managersettingsProds);
+                        fos.close();
+                        System.out.println("managersettingsProds.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+
+                    // Else, display error
+                } else {
+                    if (showIncorrectPrompt == 0) {
+                        frame.loginAttempt(username);
+                        JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                    }
                 }
             }
+
+            
         }
     }//GEN-LAST:event_loginBtnActionPerformed
 
