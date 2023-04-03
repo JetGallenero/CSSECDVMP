@@ -297,7 +297,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             sqlite.addHistory(username, productName, qty, history.getTimestamp().toString());
             
             
-            
+            init();
         }
         
         
@@ -370,7 +370,7 @@ public class MgmtProduct extends javax.swing.JPanel {
             }
         }
     }
-//GEN-LAST:event_editBtnActionPerformed
+                                       
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {
         if(table.getSelectedRow() >= 0){

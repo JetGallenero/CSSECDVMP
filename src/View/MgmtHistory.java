@@ -67,25 +67,25 @@ public class MgmtHistory extends javax.swing.JPanel {
 
         // condition for role contents
 
-        byte[] managersettingsProds = new byte[4];
-        byte[] staffsettings = new byte[4];
+//        byte[] managersettingsProds = new byte[4];
+//        byte[] staffsettings = new byte[4];
         byte[] clientsettings = new byte[4];
 
-        try {
-            FileInputStream fis = new FileInputStream("staffsettings.bin");
-            fis.read(staffsettings);
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileInputStream fis = new FileInputStream("staffsettings.bin");
+//            fis.read(staffsettings);
+//            fis.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-        try {
-            FileInputStream fis = new FileInputStream("managersettingsProds.bin");
-            fis.read(managersettingsProds);
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FileInputStream fis = new FileInputStream("managersettingsProds.bin");
+//            fis.read(managersettingsProds);
+//            fis.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         try {
             FileInputStream fis = new FileInputStream("clientsettings.bin");
@@ -104,14 +104,16 @@ public class MgmtHistory extends javax.swing.JPanel {
         searchBtn.setVisible(clientsettingshist[0] == 1);
         reloadBtn.setVisible(clientsettingshist[1] == 1);
 
-
+        
+//        System.out.println(username);
+        
         // LOAD CONTENTS
         ArrayList<History> history = sqlite.getHistory();
         for(int nCtr = 0; nCtr < history.size(); nCtr++){
             Product product = sqlite.getProduct(history.get(nCtr).getName());
 
             if (currentrole == 2) {
-                if(history.get(nCtr).getName().equals(username)) {
+                if(history.get(nCtr).getUsername().equals(username)) {
                     tableModel.addRow(new Object[]{
                             history.get(nCtr).getUsername(),
                             history.get(nCtr).getName(),
@@ -132,6 +134,7 @@ public class MgmtHistory extends javax.swing.JPanel {
                 });
             }
         }
+        
 
         System.out.println("this is the current role " + currentrole);
     }

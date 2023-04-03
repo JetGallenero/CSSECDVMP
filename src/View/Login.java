@@ -108,14 +108,14 @@ public class Login extends javax.swing.JPanel {
                 // If user exists, go to mainNav
                 if (frame.loginAuth(username, password)) {
                     // check if locked na ba ung account
-                    frame.mainNav();
+                    
 
                     Login.usernameFld.setText("");
                     Login.passwordFld.setText("");
 
                     frame.resetAttempts(username);
-
-                    frame.hideButtons(frame.getCurrentUser(username).getRole());
+                    
+                    
                     System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
                     // role binary
@@ -255,7 +255,8 @@ public class Login extends javax.swing.JPanel {
                         e.printStackTrace();
                     }
 
-
+                    frame.mainNav();
+                    frame.hideButtons(frame.getCurrentUser(username).getRole());
                     // Else, display error
                 } else {
                     if (showIncorrectPrompt == 0) {
