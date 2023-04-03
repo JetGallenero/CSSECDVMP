@@ -32,6 +32,21 @@ public class StaffHome extends javax.swing.JPanel {
     
     public StaffHome() {
         initComponents();
+        byte[] settings = new byte[4];
+        try {
+            FileInputStream fis = new FileInputStream("settings.bin");
+            fis.read(settings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Show/Hide buttons based on the binary file settings
+        usersBtn.setVisible(settings[0] == 1);
+        historyBtn.setVisible(settings[1] == 1);
+        productsBtn.setVisible(settings[2] == 1);
+        logsBtn.setVisible(settings[3] == 1);
     }
 
     public void init(SQLite sqlite) {
@@ -48,21 +63,7 @@ public class StaffHome extends javax.swing.JPanel {
         Content.add(mgmtLogs, "mgmtLogs");
 
         // Read the binary file and store the visibility settings in a byte array
-        byte[] settings = new byte[4];
-        try {
-            FileInputStream fis = new FileInputStream("settings.bin");
-            fis.read(settings);
-            fis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-
-        // Show/Hide buttons based on the binary file settings
-        usersBtn.setVisible(settings[0] == 1);
-        historyBtn.setVisible(settings[1] == 1);
-        productsBtn.setVisible(settings[2] == 1);
-        logsBtn.setVisible(settings[3] == 1);
     }
 
 

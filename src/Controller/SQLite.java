@@ -65,20 +65,9 @@ public class SQLite {
         return Optional.ofNullable(currentUser).orElse("Unknown");
     }
 
-    public static void clearSettingsFile() {
-        try {
-            File settingsFile = new File("settings.bin");
-            if (settingsFile.exists()) {
-                // Overwrite the file with an empty byte array
-                try (FileOutputStream fos = new FileOutputStream(settingsFile)) {
-                    fos.write(new byte[0]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void delSettingsFile() {
+        File del = new File("settings.bin");
+        del.delete();
     }
 
     public void createLogsTable() {

@@ -25,9 +25,9 @@ public class MgmtLogs extends javax.swing.JPanel {
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
-//        UNCOMMENT TO DISABLE BUTTONS
-//        clearBtn.setVisible(false);
-//        debugBtn.setVisible(false);
+
+       clearBtn.setVisible(false);
+       debugBtn.setVisible(false);
     }
 
     public void init(){
@@ -35,7 +35,10 @@ public class MgmtLogs extends javax.swing.JPanel {
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
-        
+
+        clearBtn.setVisible(true);
+        debugBtn.setVisible(true);
+
 //      LOAD CONTENTS
         ArrayList<Logs> logs = sqlite.getLogs();
         for(int nCtr = 0; nCtr < logs.size(); nCtr++){

@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Login extends javax.swing.JPanel {
 
@@ -116,14 +117,24 @@ public class Login extends javax.swing.JPanel {
                 if (frame.getCurrentUser(username).getRole() == 2) {
                     settings[1] = 1;
                     settings[2] = 1;
-                    clientsettings[1] = 1;
-                    clientsettings[2] = 1;
-                    clientsettings[3] = 1;
+                    Arrays.fill(clientsettings, (byte) 0); // Add this line to set all elements to 0
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("clientsettings.bin");
+                        fos.write(clientsettings);
+                        fos.close();
+                        System.out.println("clientsettings.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 } else if (frame.getCurrentUser(username).getRole() == 3) { //staff
                     settings[2] = 1;
                     staffsettings[1] = 1;
                     staffsettings[2] = 1;
                     staffsettings[3] = 1;
+
+
                 }
                 else if (frame.getCurrentUser(username).getRole() == 4) { //manager
                     settings[1] = 1;
@@ -131,10 +142,33 @@ public class Login extends javax.swing.JPanel {
                     managersettingsProds[1] = 1;
                     managersettingsProds[2] = 1;
                     managersettingsProds[3] = 1;
+                    managersettingsHist[0] = 1;
+                    managersettingsHist[1] = 1;
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("managersettingsHist.bin");
+                        fos.write(managersettingsHist);
+                        fos.close();
+                        System.out.println("managersettingsHist.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        FileOutputStream fos = new FileOutputStream("managersettingsProds.bin");
+                        fos.write(managersettingsProds);
+                        fos.close();
+                        System.out.println("managersettingsProds.bin file created successfully.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
                 else if (frame.getCurrentUser(username).getRole() == 5) { //admin
-                    settings[1] = 1;
+                    settings[0] = 1;
+                    settings[3] = 1;
                 }
+
 
 
                 // Write the binary file
@@ -147,32 +181,8 @@ public class Login extends javax.swing.JPanel {
                     e.printStackTrace();
                 }
 
-                try {
-                    FileOutputStream fos = new FileOutputStream("staffsettings.bin");
-                    fos.write(staffsettings);
-                    fos.close();
-                    System.out.println("managersettingsHist.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-                    FileOutputStream fos = new FileOutputStream("managersettingsHist.bin");
-                    fos.write(managersettingsHist);
-                    fos.close();
-                    System.out.println("managersettingsHist.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                try {
-                    FileOutputStream fos = new FileOutputStream("managersettingsProds.bin");
-                    fos.write(managersettingsProds);
-                    fos.close();
-                    System.out.println("managersettingsProds.bin file created successfully.");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
 
                 // Else, display error

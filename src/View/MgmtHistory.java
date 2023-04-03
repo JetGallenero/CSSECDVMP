@@ -8,6 +8,9 @@ package View;
 import Controller.SQLite;
 import Model.History;
 import Model.Product;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -35,8 +38,6 @@ public class MgmtHistory extends javax.swing.JPanel {
         table.getColumnModel().getColumn(5).setCellRenderer(rightAlign);
         
 //        UNCOMMENT TO DISABLE BUTTONS
-//        searchBtn.setVisible(false);
-//        reportBtn.setVisible(false);
     }
 
     public void init(){
@@ -58,6 +59,22 @@ public class MgmtHistory extends javax.swing.JPanel {
                 history.get(nCtr).getTimestamp()
             });
         }
+
+        searchBtn.setVisible(true);
+        reloadBtn.setVisible(true);
+
+        byte[] managersettingHist = new byte[4];
+
+        try {
+            FileInputStream fis = new FileInputStream("managersettingsHist.bin");
+            fis.read(managersettingHist);
+            fis.close();
+            searchBtn.setVisible(managersettingHist[0] == 1);
+            reloadBtn.setVisible(managersettingHist[1] == 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
     
     public void designer(JTextField component, String text){

@@ -33,10 +33,6 @@ public class MgmtProduct extends javax.swing.JPanel {
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
 
-            purchaseBtn.setVisible(true);
-            addBtn.setVisible(true);
-            editBtn.setVisible(true);
-            deleteBtn.setVisible(true);
     }
 
     public void init(){
@@ -54,38 +50,53 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getPrice()});
         }
 
+        purchaseBtn.setVisible(true);
+        addBtn.setVisible(true);
+        editBtn.setVisible(true);
+        deleteBtn.setVisible(true);
+
         byte[] managersettingsProds = new byte[4];
         byte[] staffsettings = new byte[4];
-
-
+        byte[] clientsettings = new byte[4];
 
         try {
-            FileInputStream fis = new FileInputStream("staffsettings.bin");
-            fis.read(staffsettings);
+            FileInputStream fis = new FileInputStream("clientsettings.bin");
+            fis.read(clientsettings);
             fis.close();
+            purchaseBtn.setVisible(clientsettings[0] == 1);
+            addBtn.setVisible(clientsettings[1] == 1);
+            editBtn.setVisible(clientsettings[2] == 1);
+            deleteBtn.setVisible(clientsettings[3] == 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
 
         try {
             FileInputStream fis = new FileInputStream("managersettingsProds.bin");
             fis.read(managersettingsProds);
             fis.close();
+            purchaseBtn.setVisible(managersettingsProds[0] == 1);
+            addBtn.setVisible(managersettingsProds[1] == 1);
+            editBtn.setVisible(managersettingsProds[2] == 1);
+            deleteBtn.setVisible(managersettingsProds[3] == 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        try {
+            FileInputStream fis = new FileInputStream("staffsettings.bin");
+            fis.read(staffsettings);
+            fis.close();
+            purchaseBtn.setVisible(staffsettings[0] == 1);
+            addBtn.setVisible(staffsettings[1] == 1);
+            editBtn.setVisible(staffsettings[2] == 1);
+            deleteBtn.setVisible(staffsettings[3] == 1);
 
-        // Show/Hide staff buttons based on the staffsettings.bin file
-        purchaseBtn.setVisible(staffsettings[0] == 1);
-        addBtn.setVisible(staffsettings[1] == 1);
-        editBtn.setVisible(staffsettings[2] == 1);
-        deleteBtn.setVisible(staffsettings[3] == 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        purchaseBtn.setVisible(managersettingsProds[0] == 1);
-        addBtn.setVisible(managersettingsProds[1] == 1);
-        editBtn.setVisible(managersettingsProds[2] == 1);
-        deleteBtn.setVisible(managersettingsProds[3] == 1);
     }
 
     public void designer(JTextField component, String text){
