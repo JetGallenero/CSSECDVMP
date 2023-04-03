@@ -107,10 +107,15 @@ public class Login extends javax.swing.JPanel {
                 System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
                 byte[] settings = new byte[4];
+                byte[] staffsettings = new byte[4];
                 if (frame.getCurrentUser(username).getRole() == 2) {
                     settings[2] = 1;
                 } else if (frame.getCurrentUser(username).getRole() == 3) {
                     settings[2] = 1;
+                    staffsettings[1] = 1;
+                    staffsettings[2] = 1;
+                    staffsettings[3] = 1;
+
                 }
                 else if (frame.getCurrentUser(username).getRole() == 4) {
                     settings[0] = 1;
@@ -120,12 +125,20 @@ public class Login extends javax.swing.JPanel {
                     settings[0] = 1;
                     settings[1] = 1;
                 }
-                // Add more conditions for other roles if needed
+
 
                 // Write the binary file
                 try {
                     FileOutputStream fos = new FileOutputStream("settings.bin");
                     fos.write(settings);
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    FileOutputStream fos = new FileOutputStream("staffsettings.bin");
+                    fos.write(staffsettings);
                     fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -9,6 +9,8 @@ import Controller.SQLite;
 import Model.Product;
 import Model.User;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -42,27 +44,34 @@ public class MgmtProduct extends javax.swing.JPanel {
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
-        
+
 //      LOAD CONTENTS
         ArrayList<Product> products = sqlite.getProduct();
         for(int nCtr = 0; nCtr < products.size(); nCtr++){
             tableModel.addRow(new Object[]{
-                products.get(nCtr).getName(), 
-                products.get(nCtr).getStock(), 
+                products.get(nCtr).getName(),
+                products.get(nCtr).getStock(),
                 products.get(nCtr).getPrice()});
         }
-        
-//        try {
-//            if (sqlite.getRole(currentUser) == 2) {
-//                addBtn.setVisible(false);
-//            } else if (sqlite.getRole(currentUser) == 3) {
-//                purchaseBtn.setVisible(false);
-//            }
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
+
+        byte[] staffsettings = new byte[4];
+
+        try {
+            FileInputStream fis = new FileInputStream("staffsettings.bin");
+            fis.read(staffsettings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Show/Hide staff buttons based on the staffsettings.bin file
+        purchaseBtn.setVisible(staffsettings[0] == 1);
+        addBtn.setVisible(staffsettings[1] == 1);
+        editBtn.setVisible(staffsettings[2] == 1);
+        deleteBtn.setVisible(staffsettings[3] == 1);
     }
-    
+
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
         component.setFont(new java.awt.Font("Tahoma", 0, 18));
