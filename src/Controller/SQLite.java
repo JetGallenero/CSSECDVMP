@@ -590,6 +590,7 @@ public class SQLite {
     }
 
     
+
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
         Product product = null;
@@ -614,6 +615,41 @@ public class SQLite {
             pstmt.setString(2, productName);
             pstmt.executeUpdate();
             System.out.println("Stock of " + productName + " updated to " + newStock);
+
+    public void addProduct(Product product) {
+        String sql = "INSERT INTO product (name, stock, price) VALUES (?, ?, ?);";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, product.getName());
+            pstmt.setInt(2, product.getStock());
+            pstmt.setFloat(3, product.getPrice());
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+    }
+
+    public void deleteProduct(String name) {
+        String sql = "DELETE FROM product WHERE name = ?;";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            System.out.print(ex);
+        }
+    }
+
+
+    public void updateProduct(Product product) {
+        String sql = "UPDATE product SET name=?, stock=?, price=? WHERE id=?;";
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, product.getName());
+            pstmt.setInt(2, product.getStock());
+            pstmt.setFloat(3, product.getPrice());
+            pstmt.setInt(4, product.getId());
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             System.out.print(ex);
         }
