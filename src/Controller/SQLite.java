@@ -334,26 +334,53 @@ public class SQLite {
         return users;
     }
     
+//    public User getUser(String username){
+//        User user = new User();
+//        
+//        String sql = "SELECT id, username, password, role, locked WHERE username = ?";
+//        
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//            Statement stmt = conn.createStatement();
+//            ResultSet rs = stmt.executeQuery(sql)){
+//            
+//            while (rs.next()) {
+//                user.setId(rs.getInt("id"));
+//                user.setUsername(rs.getString("username"));
+//                user.setPassword(rs.getString("password"));
+//                user.setRole(rs.getInt("role"));
+//                user.setLocked(rs.getInt("locked"));
+//            }
+//        } catch (Exception ex) {}
+//        
+//        return user;
+//    }
+    
     public User getUser(String username){
-        User user = new User();
-        
-        String sql = "SELECT id, username, password, role, locked WHERE username = ?";
+        String sql = "SELECT id, username, password, role, locked FROM users WHERE username = ?";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)){
+            PreparedStatement pstmt = conn.prepareStatement(sql)){
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
             
-            while (rs.next()) {
-                user.setId(rs.getInt("id"));
-                user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password"));
-                user.setRole(rs.getInt("role"));
-                user.setLocked(rs.getInt("locked"));
+            if(rs.next()) {
+                int dbId = rs.getInt("id");
+                String dbUser = rs.getString("username");
+                String dbPass = rs.getString("password");
+                int dbRole = rs.getInt("role");
+                int dbLocked = rs.getInt("locked");
+                
+                System.out.print(dbRole);
+                return new User(dbId, dbUser, dbPass, dbRole, dbLocked);
+                
             }
-        } catch (Exception ex) {}
-        
-        return user;
+        } catch (SQLException ex) {
+            System.out.print(ex);
+        }
+        return null;
     }
+    
+    
 
     public void addUser(String username, String password, int role) {
         String sql = "INSERT INTO users(username,password,role) VALUES('" + username + "','" + password + "','" + role + "')";

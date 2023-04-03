@@ -101,6 +101,7 @@ public class Login extends javax.swing.JPanel {
                 Login.passwordFld.setText("");
                 
                 frame.hideButtons(frame.getCurrentUser(username).getRole());
+                System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
             // Else, display error
             } else {

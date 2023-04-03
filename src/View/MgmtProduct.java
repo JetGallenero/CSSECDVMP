@@ -51,6 +51,16 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getStock(), 
                 products.get(nCtr).getPrice()});
         }
+        
+        try {
+            if (sqlite.getRole(currentUser) == 2) {
+                addBtn.setVisible(false);
+            } else if (sqlite.getRole(currentUser) == 3) {
+                purchaseBtn.setVisible(false);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     
     public void designer(JTextField component, String text){
