@@ -6,6 +6,9 @@ import Model.Product;
 import Model.User;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -61,7 +64,19 @@ public class SQLite {
         }
         return Optional.ofNullable(currentUser).orElse("Unknown");
     }
-    
+
+    public static void clearSettingsFile() {
+        try {
+            File settingsFile = new File("settings.bin");
+            if (settingsFile.exists()) {
+                if (!settingsFile.delete()) {
+                    System.out.println("Failed to delete settings.bin");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void createLogsTable() {
         String sql = "CREATE TABLE IF NOT EXISTS logs (\n"
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"

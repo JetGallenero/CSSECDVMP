@@ -54,7 +54,15 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getPrice()});
         }
 
+        byte[] settings = new byte[4];
         byte[] staffsettings = new byte[4];
+        try {
+            FileInputStream fis = new FileInputStream("settings.bin");
+            fis.read(settings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             FileInputStream fis = new FileInputStream("staffsettings.bin");

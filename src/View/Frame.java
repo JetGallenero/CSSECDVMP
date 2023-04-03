@@ -1,6 +1,8 @@
 package View;
 
 import Controller.Main;
+import Controller.SQLite;
+
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -201,6 +203,7 @@ public class Frame extends javax.swing.JFrame {
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         frameView.show(Container, "loginPnl");
+        SQLite.clearSettingsFile();
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
