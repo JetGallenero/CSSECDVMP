@@ -203,7 +203,6 @@ public class Frame extends javax.swing.JFrame {
 
     private void logoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutBtnActionPerformed
         frameView.show(Container, "loginPnl");
-        SQLite.clearSettingsFile();
     }//GEN-LAST:event_logoutBtnActionPerformed
 
     public Main main;
@@ -273,12 +272,35 @@ public class Frame extends javax.swing.JFrame {
 
     public void hideButtons(int role) {
         switch(role) {
-            case 2:
+            case 2: // client
                 adminBtn.setVisible(false);
                 managerBtn.setVisible(false);
                 staffBtn.setVisible(false);
+                clientBtn.setVisible(true);
                 contentView.show(Content, "clientHomePnl");
                 break;
+            case 3: // staff
+                adminBtn.setVisible(false);
+                managerBtn.setVisible(false);
+                clientBtn.setVisible(false);
+                staffBtn.setVisible(true);
+                contentView.show(Content, "staffHomePnl");
+                break;
+            case 4: // manager
+                adminBtn.setVisible(false);
+                staffBtn.setVisible(false);
+                clientBtn.setVisible(false);
+                managerBtn.setVisible(true);
+                contentView.show(Content, "managerHomePnl");
+                break;
+            case 5: // admin
+                staffBtn.setVisible(false);
+                clientBtn.setVisible(false);
+                managerBtn.setVisible(false);
+                adminBtn.setVisible(true);
+                contentView.show(Content, "adminHomePnl");
+                break;
+
         }
     }
 

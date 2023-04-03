@@ -69,14 +69,18 @@ public class SQLite {
         try {
             File settingsFile = new File("settings.bin");
             if (settingsFile.exists()) {
-                if (!settingsFile.delete()) {
-                    System.out.println("Failed to delete settings.bin");
+                // Overwrite the file with an empty byte array
+                try (FileOutputStream fos = new FileOutputStream(settingsFile)) {
+                    fos.write(new byte[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public void createLogsTable() {
         String sql = "CREATE TABLE IF NOT EXISTS logs (\n"
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"

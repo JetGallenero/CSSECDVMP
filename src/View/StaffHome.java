@@ -57,6 +57,7 @@ public class StaffHome extends javax.swing.JPanel {
             e.printStackTrace();
         }
 
+
         // Show/Hide buttons based on the binary file settings
         usersBtn.setVisible(settings[0] == 1);
         historyBtn.setVisible(settings[1] == 1);

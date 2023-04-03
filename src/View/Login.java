@@ -108,20 +108,27 @@ public class Login extends javax.swing.JPanel {
 
                 byte[] settings = new byte[4];
                 byte[] staffsettings = new byte[4];
+                byte[] clientsettings = new byte[4];
+                byte[] adminsettings = new byte[4];
+                byte[] managersettings = new byte[4];
+
                 if (frame.getCurrentUser(username).getRole() == 2) {
+                    settings[1] = 1;
                     settings[2] = 1;
-                } else if (frame.getCurrentUser(username).getRole() == 3) {
+                    clientsettings[1] = 1;
+                    clientsettings[2] = 1;
+                    clientsettings[3] = 1;
+                } else if (frame.getCurrentUser(username).getRole() == 3) { //staff
                     settings[2] = 1;
                     staffsettings[1] = 1;
                     staffsettings[2] = 1;
                     staffsettings[3] = 1;
                 }
-                else if (frame.getCurrentUser(username).getRole() == 4) {
-                    settings[0] = 1;
+                else if (frame.getCurrentUser(username).getRole() == 4) { //manager
                     settings[1] = 1;
+                    settings[2] = 1;
                 }
-                else if (frame.getCurrentUser(username).getRole() == 5) {
-                    settings[0] = 1;
+                else if (frame.getCurrentUser(username).getRole() == 5) { //admin
                     settings[1] = 1;
                 }
 
@@ -131,6 +138,7 @@ public class Login extends javax.swing.JPanel {
                     FileOutputStream fos = new FileOutputStream("settings.bin");
                     fos.write(settings);
                     fos.close();
+                    System.out.println("settings.bin file created successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,6 +147,7 @@ public class Login extends javax.swing.JPanel {
                     FileOutputStream fos = new FileOutputStream("staffsettings.bin");
                     fos.write(staffsettings);
                     fos.close();
+                    System.out.println("staffsettings.bin file created successfully.");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
