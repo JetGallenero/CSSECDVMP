@@ -54,19 +54,22 @@ public class MgmtProduct extends javax.swing.JPanel {
                 products.get(nCtr).getPrice()});
         }
 
-        byte[] settings = new byte[4];
+        byte[] managersettingsProds = new byte[4];
         byte[] staffsettings = new byte[4];
+
+
+
         try {
-            FileInputStream fis = new FileInputStream("settings.bin");
-            fis.read(settings);
+            FileInputStream fis = new FileInputStream("staffsettings.bin");
+            fis.read(staffsettings);
             fis.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            FileInputStream fis = new FileInputStream("staffsettings.bin");
-            fis.read(staffsettings);
+            FileInputStream fis = new FileInputStream("managersettingsProds.bin");
+            fis.read(managersettingsProds);
             fis.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -78,6 +81,11 @@ public class MgmtProduct extends javax.swing.JPanel {
         addBtn.setVisible(staffsettings[1] == 1);
         editBtn.setVisible(staffsettings[2] == 1);
         deleteBtn.setVisible(staffsettings[3] == 1);
+
+        purchaseBtn.setVisible(managersettingsProds[0] == 1);
+        addBtn.setVisible(managersettingsProds[1] == 1);
+        editBtn.setVisible(managersettingsProds[2] == 1);
+        deleteBtn.setVisible(managersettingsProds[3] == 1);
     }
 
     public void designer(JTextField component, String text){
