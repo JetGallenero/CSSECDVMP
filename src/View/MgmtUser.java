@@ -224,12 +224,12 @@ public class MgmtUser extends javax.swing.JPanel {
             }
         }
     }
-//GEN-LAST:event_deleteBtnActionPerformed
+                                         
 
     private void lockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lockBtnActionPerformed
         if(table.getSelectedRow() >= 0){
             String state = "lock";
-            if("1".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
+            if("2".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
                 state = "unlock";
         }
 
@@ -241,9 +241,9 @@ public class MgmtUser extends javax.swing.JPanel {
             int lockVal;
 
             if("lock".equals(state)){
-                lockVal = 2;
-            } else {
                 lockVal = 0;
+            } else {
+                lockVal = 2;
             }
 
             sqlite.loginAttempt(userId, lockVal);

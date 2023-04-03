@@ -308,6 +308,10 @@ public class Frame extends javax.swing.JFrame {
     public int isLocked(String username) {
         return main.sqlite.isLocked(username);
     }
+    
+    public int getLockedUser(String username) {
+        return main.sqlite.getLockedUser(username);
+    }
 
     public void hideButtons(int role) {
         switch(role) {

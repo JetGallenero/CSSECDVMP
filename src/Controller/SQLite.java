@@ -250,10 +250,11 @@ public class SQLite {
                     
                     // Password is valid, check if same with the typed password
                     if (password.equals(confpassword)) {
-                        sql = "INSERT INTO users(username,password) VALUES(?,?)";
+                        sql = "INSERT INTO users(username,password,role) VALUES(?,?,?)";
                         pstmt = conn.prepareStatement(sql);
                         pstmt.setString(1, username);
                         pstmt.setString(2, password);
+                        pstmt.setInt(3, 2);
                         pstmt.executeUpdate();
                         
                         // Display success message
@@ -441,6 +442,27 @@ public class SQLite {
             if (rs.next()) { // Check if the ResultSet has any rows
                 // Return the value of the 'locked' column
                 return rs.getInt("locked") + 1;
+            } else {
+                // The user with the specified username does not exist
+                return -1;
+            }
+        } catch (SQLException ex) {
+            System.out.println("An error occurred while executing the query: " + ex.getMessage());
+            return -2;
+        }
+    }
+    
+    public int getLockedUser(String username) {
+        String query = "SELECT locked FROM users WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) { // Check if the ResultSet has any rows
+                // Return the value of the 'locked' column
+                return rs.getInt("locked");
             } else {
                 // The user with the specified username does not exist
                 return -1;

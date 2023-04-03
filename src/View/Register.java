@@ -107,6 +107,11 @@ public class Register extends javax.swing.JPanel {
             // Call the registerUser function in the controller
             Controller.SQLite.addUser(username, password, confPassword);
             // Display success or error message
+            Login.usernameFld.setText("");
+            Login.passwordFld.setText("");
+            Register.usernameFld.setText("");
+            Register.passwordFld.setText("");
+            Register.confpassFld.setText("");
         }
     }
 //GEN-LAST:event_registerBtnActionPerformed

@@ -365,6 +365,9 @@ public class MgmtProduct extends javax.swing.JPanel {
                 // Use the SQLite object to update the corresponding record in the database
                 sqlite.updateProduct(product);
 
+                // Update the stock of the product in the database
+                sqlite.updateProductStocks(name, stock);
+
                 // Refresh the table to display the updated information
                 init();
             }
