@@ -259,46 +259,23 @@ public class Frame extends javax.swing.JFrame {
     public void registerAction(String username, String password, String confpass){
         main.sqlite.addUser(username, password, confpass);
     }
-    
+
     public boolean loginAuth(String username, String password) {
         return main.sqlite.login(username, password);
     }
-    
+
     public Model.User getCurrentUser(String username) {
         return main.sqlite.getUser(username);
     }
-    
+
     public void hideButtons(int role) {
         switch(role) {
-            case 2: // client
+            case 2:
                 adminBtn.setVisible(false);
                 managerBtn.setVisible(false);
                 staffBtn.setVisible(false);
-                clientBtn.setVisible(true);
                 contentView.show(Content, "clientHomePnl");
                 break;
-            case 3: // staff 
-                adminBtn.setVisible(false);
-                managerBtn.setVisible(false);
-                clientBtn.setVisible(false);
-                staffBtn.setVisible(true);
-                contentView.show(Content, "staffHomePnl");
-                break;
-            case 4: // manager
-                adminBtn.setVisible(false);
-                staffBtn.setVisible(false);
-                clientBtn.setVisible(false);
-                managerBtn.setVisible(true);
-                contentView.show(Content, "managerHomePnl");
-                break;
-            case 5: // admin
-                staffBtn.setVisible(false);
-                clientBtn.setVisible(false);
-                managerBtn.setVisible(false);
-                adminBtn.setVisible(true);
-                contentView.show(Content, "adminHomePnl");
-                break;
-                
         }
     }
 

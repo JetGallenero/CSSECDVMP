@@ -108,6 +108,7 @@ public class Login extends javax.swing.JPanel {
 
                 byte[] settings = new byte[4];
                 byte[] staffsettings = new byte[4];
+                byte[] adminsettings = new byte[4];
                 if (frame.getCurrentUser(username).getRole() == 2) {
                     settings[2] = 1;
                 } else if (frame.getCurrentUser(username).getRole() == 3) {
