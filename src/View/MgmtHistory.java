@@ -37,22 +37,24 @@ public class MgmtHistory extends javax.swing.JPanel {
         table.getColumnModel().getColumn(4).setCellRenderer(rightAlign);
         table.getColumnModel().getColumn(5).setCellRenderer(rightAlign);
         
-//        UNCOMMENT TO DISABLE BUTTONS
-//        searchBtn.setVisible(false);
-//        reportBtn.setVisible(false);
+//
+       searchBtn.setVisible(false);
+       reloadBtn.setVisible(false);
     }
 
     public void init(){
-//      CLEAR TABLE
+        // CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
-        
-        
+
         // get current role
         int currentrole = 0;
         String username = "temp";
-        
+
+        byte[] managersettingshist = new byte[4];
+        byte[] clientsettingshist = new byte[4];
+
         try (DataInputStream dis = new DataInputStream(new FileInputStream("currentrole.bin"))){
             username = dis.readUTF();
             currentrole = dis.readInt();
@@ -60,78 +62,78 @@ public class MgmtHistory extends javax.swing.JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         // condition for role contents
-        
-        
-//      LOAD CONTENTS
+
+        byte[] managersettingsProds = new byte[4];
+        byte[] staffsettings = new byte[4];
+        byte[] clientsettings = new byte[4];
+
+        try {
+            FileInputStream fis = new FileInputStream("staffsettings.bin");
+            fis.read(staffsettings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileInputStream fis = new FileInputStream("managersettingsProds.bin");
+            fis.read(managersettingsProds);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileInputStream fis = new FileInputStream("clientsettings.bin");
+            fis.read(clientsettings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        // Show/Hide manager buttons based on the managersettingsProds.bin file
+        searchBtn.setVisible(managersettingshist[0] == 1);
+        reloadBtn.setVisible(managersettingshist[1] == 1);
+
+        // Show/Hide client buttons based on the clientsettings.bin file
+        searchBtn.setVisible(clientsettingshist[0] == 1);
+        reloadBtn.setVisible(clientsettingshist[1] == 1);
+
+
+        // LOAD CONTENTS
         ArrayList<History> history = sqlite.getHistory();
         for(int nCtr = 0; nCtr < history.size(); nCtr++){
             Product product = sqlite.getProduct(history.get(nCtr).getName());
-            
+
             if (currentrole == 2) {
                 if(history.get(nCtr).getName().equals(username)) {
                     tableModel.addRow(new Object[]{
-                        history.get(nCtr).getUsername(), 
-                        history.get(nCtr).getName(), 
-                        history.get(nCtr).getStock(), 
-                        product.getPrice(), 
-                        product.getPrice() * history.get(nCtr).getStock(), 
-                        history.get(nCtr).getTimestamp()
+                            history.get(nCtr).getUsername(),
+                            history.get(nCtr).getName(),
+                            history.get(nCtr).getStock(),
+                            product.getPrice(),
+                            product.getPrice() * history.get(nCtr).getStock(),
+                            history.get(nCtr).getTimestamp()
                     });
                 }
             } else if (currentrole == 4) {
                 tableModel.addRow(new Object[]{
-                    history.get(nCtr).getUsername(), 
-                    history.get(nCtr).getName(), 
-                    history.get(nCtr).getStock(), 
-                    product.getPrice(), 
-                    product.getPrice() * history.get(nCtr).getStock(), 
-                    history.get(nCtr).getTimestamp()
+                        history.get(nCtr).getUsername(),
+                        history.get(nCtr).getName(),
+                        history.get(nCtr).getStock(),
+                        product.getPrice(),
+                        product.getPrice() * history.get(nCtr).getStock(),
+                        history.get(nCtr).getTimestamp()
                 });
             }
-            
-            
-            
         }
-        
-        
-        
-//        switch(currentrole) {
-//            case 2: // client
-//                adminBtn.setVisible(false);
-//                managerBtn.setVisible(false);
-//                staffBtn.setVisible(false);
-//                clientBtn.setVisible(true);
-//                contentView.show(Content, "clientHomePnl");
-//                break;
-//            case 3: // staff
-//                adminBtn.setVisible(false);
-//                managerBtn.setVisible(false);
-//                clientBtn.setVisible(false);
-//                staffBtn.setVisible(true);
-//                contentView.show(Content, "staffHomePnl");
-//                break;
-//            case 4: // manager
-//                adminBtn.setVisible(false);
-//                staffBtn.setVisible(false);
-//                clientBtn.setVisible(false);
-//                managerBtn.setVisible(true);
-//                contentView.show(Content, "managerHomePnl");
-//                break;
-//            case 5: // admin
-//                staffBtn.setVisible(false);
-//                clientBtn.setVisible(false);
-//                managerBtn.setVisible(false);
-//                adminBtn.setVisible(true);
-//                contentView.show(Content, "adminHomePnl");
-//                break;
-//
-//        }
-        
+
         System.out.println("this is the current role " + currentrole);
     }
-    
+
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
         component.setFont(new java.awt.Font("Tahoma", 0, 18));

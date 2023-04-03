@@ -39,25 +39,24 @@ public class MgmtProduct extends javax.swing.JPanel {
             deleteBtn.setVisible(true);
     }
 
-    public void init(){
-        //      CLEAR TABLE
+    public void init() {
+        // CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
 
-//      LOAD CONTENTS
+        // LOAD CONTENTS
         ArrayList<Product> products = sqlite.getProduct();
         for(int nCtr = 0; nCtr < products.size(); nCtr++){
             tableModel.addRow(new Object[]{
-                products.get(nCtr).getName(),
-                products.get(nCtr).getStock(),
-                products.get(nCtr).getPrice()});
+                    products.get(nCtr).getName(),
+                    products.get(nCtr).getStock(),
+                    products.get(nCtr).getPrice()});
         }
 
         byte[] managersettingsProds = new byte[4];
         byte[] staffsettings = new byte[4];
-
-
+        byte[] clientsettings = new byte[4];
 
         try {
             FileInputStream fis = new FileInputStream("staffsettings.bin");
@@ -75,6 +74,13 @@ public class MgmtProduct extends javax.swing.JPanel {
             e.printStackTrace();
         }
 
+        try {
+            FileInputStream fis = new FileInputStream("clientsettings.bin");
+            fis.read(clientsettings);
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // Show/Hide staff buttons based on the staffsettings.bin file
         purchaseBtn.setVisible(staffsettings[0] == 1);
@@ -82,11 +88,19 @@ public class MgmtProduct extends javax.swing.JPanel {
         editBtn.setVisible(staffsettings[2] == 1);
         deleteBtn.setVisible(staffsettings[3] == 1);
 
+        // Show/Hide manager buttons based on the managersettingsProds.bin file
         purchaseBtn.setVisible(managersettingsProds[0] == 1);
         addBtn.setVisible(managersettingsProds[1] == 1);
         editBtn.setVisible(managersettingsProds[2] == 1);
         deleteBtn.setVisible(managersettingsProds[3] == 1);
+
+        // Show/Hide client buttons based on the clientsettings.bin file
+        purchaseBtn.setVisible(clientsettings[0] == 1);
+        addBtn.setVisible(clientsettings[1] == 1);
+        editBtn.setVisible(clientsettings[2] == 1);
+        deleteBtn.setVisible(clientsettings[3] == 1);
     }
+
 
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
