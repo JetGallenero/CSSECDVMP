@@ -8,8 +8,9 @@ package View;
 import Controller.SQLite;
 import Model.Product;
 import Model.User;
-
+import Model.History;
 import java.io.FileInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -225,6 +226,10 @@ public class MgmtProduct extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseBtnActionPerformed
+        int qty = 0;
+        int newStock = 0;
+        String productName = "temp";
+        
         if(table.getSelectedRow() >= 0){
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT STOCK");
@@ -236,8 +241,42 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
-                System.out.println(stockFld.getText());
+                qty = Integer.parseInt(stockFld.getText());
+                productName = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+                System.out.println(productName + qty);
             }
+            
+            // check if pasok sa stock
+            Product product = sqlite.getProduct(productName);
+            
+            // subtract from stock
+            if (qty <= product.getStock()) {
+                newStock = product.getStock() - qty;
+                // put in db
+                sqlite.updateProductStocks(productName, newStock);
+            } else {
+                JOptionPane.showMessageDialog(null, "Current stocks cannot accommodate your puchase.");
+            }
+            
+            // check current username and role
+            String username = "temp";
+            int currentrole = 0;
+            
+            // add sa history ng user
+            try (DataInputStream dis = new DataInputStream(new FileInputStream("currentrole.bin"))){
+                username = dis.readUTF();
+                currentrole = dis.readInt();
+                dis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            History history = new History(username, productName, qty);
+            
+            sqlite.addHistory(username, productName, qty, history.getTimestamp().toString());
+            
+            
+            
         }
         
         

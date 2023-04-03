@@ -48,12 +48,14 @@ public class MgmtHistory extends javax.swing.JPanel {
             tableModel.removeRow(0);
         }
 
-        // get current role
-        int currentrole = 0;
-        String username = "temp";
+        
 
         byte[] managersettingshist = new byte[4];
         byte[] clientsettingshist = new byte[4];
+        
+        // get current role
+        int currentrole = 0;
+        String username = "temp";
 
         try (DataInputStream dis = new DataInputStream(new FileInputStream("currentrole.bin"))){
             username = dis.readUTF();

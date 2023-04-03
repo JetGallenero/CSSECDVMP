@@ -259,7 +259,7 @@ public class Login extends javax.swing.JPanel {
                     // Else, display error
                 } else {
                     if (showIncorrectPrompt == 0) {
-                        frame.loginAttempt(username);
+                        frame.loginAttempt(username, frame.isLocked(username));
                         JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
                     }
                 }

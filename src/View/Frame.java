@@ -271,8 +271,8 @@ public class Frame extends javax.swing.JFrame {
         return main.sqlite.getUser(username);
     }
     
-    public void loginAttempt(String username) {
-        main.sqlite.loginAttempt(username);
+    public void loginAttempt(String username, int lockVal) {
+        main.sqlite.loginAttempt(username, lockVal);
     }
     
     public void resetAttempts(String username) {

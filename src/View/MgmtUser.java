@@ -179,6 +179,10 @@ public class MgmtUser extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void editRoleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRoleBtnActionPerformed
+        
+        String username = "temp";
+        int role = 0;
+        
         if(table.getSelectedRow() >= 0){
             String[] options = {"1-DISABLED","2-CLIENT","3-STAFF","4-MANAGER","5-ADMIN"};
             JComboBox optionList = new JComboBox(options);
@@ -189,10 +193,24 @@ public class MgmtUser extends javax.swing.JPanel {
                 "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]);
             
             if(result != null){
+                
+                
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(result.charAt(0));
             }
+            
+            // get username and role
+            username = tableModel.getValueAt(table.getSelectedRow(), 0).toString();
+            role = Character.getNumericValue(result.charAt(0));
+            
+            
+            // change role in db
+            sqlite.updateUserRole(username, role);
+            
+            System.out.println(username + "'s role updated to: " + role);
         }
+        
+        
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
@@ -210,14 +228,26 @@ public class MgmtUser extends javax.swing.JPanel {
             String state = "lock";
             if("1".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
                 state = "unlock";
-            }
-            
-            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
-            
-            if (result == JOptionPane.YES_OPTION) {
-                System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
-            }
         }
+
+        int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            String userId = (String) tableModel.getValueAt(table.getSelectedRow(), 0);
+
+            int lockVal;
+
+            if("lock".equals(state)){
+                lockVal = 2;
+            } else {
+                lockVal = 0;
+            }
+
+            sqlite.loginAttempt(userId, lockVal);
+            System.out.println("Lock state of user " + userId + " has been set to " + state);
+            tableModel.setValueAt(state.equals("lock") ? "0" : "2", table.getSelectedRow(), 3); // Update the table model with the new lock state
+            }
+        }   
     }//GEN-LAST:event_lockBtnActionPerformed
 
     private void chgpassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chgpassBtnActionPerformed
