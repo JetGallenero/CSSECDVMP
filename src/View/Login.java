@@ -151,7 +151,8 @@ public class Login extends javax.swing.JPanel {
                         currentrole = 4;
                     }
                     else if (frame.getCurrentUser(username).getRole() == 5) { //admin
-                        settings[1] = 1;
+                        settings[0] = 1;
+                        settings[3] = 1;
                         currentrole = 5;
                     }
 
