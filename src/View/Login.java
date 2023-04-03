@@ -93,16 +93,28 @@ public class Login extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
+        int showIncorrectPrompt = 0;
+        
         if (evt.getSource() == loginBtn) {
             String username = usernameFld.getText();
             String password = new String(passwordFld.getText());
+            
+            if (frame.isLocked(username) == 3) {
+                frame.loginNav();
+                showIncorrectPrompt = 1;
+                JOptionPane.showMessageDialog(null, "Your account is locked. Contact an administrator.");
+            }
 
             // If user exists, go to mainNav
             if (frame.loginAuth(username, password)) {
+                // check if locked na ba ung account
                 frame.mainNav();
+
                 Login.usernameFld.setText("");
                 Login.passwordFld.setText("");
-                
+
+                frame.resetAttempts(username);
+
                 frame.hideButtons(frame.getCurrentUser(username).getRole());
                 System.out.println(frame.getCurrentUser(username).getUsername() + frame.getCurrentUser(username).getRole());
 
@@ -173,11 +185,17 @@ public class Login extends javax.swing.JPanel {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                
+                
 
 
                 // Else, display error
             } else {
-                JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                if (showIncorrectPrompt == 0) {
+                    frame.loginAttempt(username);
+                    JOptionPane.showMessageDialog(null, "The username or password is incorrect.");
+                }
+                
             }
         }
     }//GEN-LAST:event_loginBtnActionPerformed

@@ -269,6 +269,18 @@ public class Frame extends javax.swing.JFrame {
     public Model.User getCurrentUser(String username) {
         return main.sqlite.getUser(username);
     }
+    
+    public void loginAttempt(String username) {
+        main.sqlite.loginAttempt(username);
+    }
+    
+    public void resetAttempts(String username) {
+        main.sqlite.resetAttempts(username);
+    }
+    
+    public int isLocked(String username) {
+        return main.sqlite.isLocked(username);
+    }
 
     public void hideButtons(int role) {
         switch(role) {

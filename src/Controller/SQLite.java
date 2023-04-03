@@ -399,6 +399,99 @@ public class SQLite {
         return null;
     }
     
+//    public void loginAttempt(String username) {
+//        int locked = 0;
+//        
+//        // get muna ung value ng locked based from username
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//             PreparedStatement pstmt = conn.prepareStatement("SELECT locked FROM users WHERE username = ?")) {
+//            
+//            pstmt.setString(1, username);
+//            ResultSet rs = pstmt.executeQuery();
+//            
+//            locked = rs.getInt("locked");
+//            locked = locked++;
+//            
+//            incrementLocked(username, locked);
+//            
+//            System.out.println("locked: " + locked);
+//            
+//        } catch (SQLException e) {
+//            System.out.println("error in loginattempt");
+//        }
+//    }
+    
+    public int isLocked(String username) {
+        String query = "SELECT locked FROM users WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) { // Check if the ResultSet has any rows
+                // Return the value of the 'locked' column
+                return rs.getInt("locked") + 1;
+            } else {
+                // The user with the specified username does not exist
+                return -1;
+            }
+        } catch (SQLException ex) {
+            System.out.println("An error occurred while executing the query: " + ex.getMessage());
+            return -2;
+        }
+    }
+
+    
+    public void loginAttempt(String username) {
+        String query = "UPDATE users SET locked = ? WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, isLocked(username));
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            
+            System.out.println("locked value of user: " + getUser(username).getLocked());
+        } catch (SQLException ex) {
+            System.out.println("An error occurred while executing the query: " + ex.getMessage());
+        }
+    }
+    
+    
+    public void resetAttempts(String username) {
+        String query = "UPDATE users SET locked = ? WHERE username = ?";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, 0);
+            pstmt.setString(2, username);
+            pstmt.executeUpdate();
+            
+            System.out.println("locked value of user: " + getUser(username).getLocked());
+        } catch (SQLException ex) {
+            System.out.println("An error occurred while executing the query: " + ex.getMessage());
+        }
+    }
+    
+
+    
+//    public void incrementLocked(String username, int locked) {
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//             PreparedStatement pstmt = conn.prepareStatement("UPDATE users SET locked = ? WHERE username = ?")) {
+//            
+//            pstmt.setInt(1, locked);
+//            pstmt.setString(2, username);
+//            int rowsUpdated = pstmt.executeUpdate();
+//            
+//            System.out.println("Rows updated: " + rowsUpdated);
+//            System.out.println(username + "locked set to " + locked);
+//            
+//        } catch (SQLException e) {
+//            System.out.println("error in incrementlocked");
+//        }
+//    }
+    
     
 
     public void addUser(String username, String password, int role) {
@@ -412,21 +505,55 @@ public class SQLite {
             System.out.print(ex);
         }
     }
+    
+    public boolean login(String username, String password) {
+        String query = "SELECT * FROM users WHERE username = ? AND password = ?";
 
-    public static boolean login(String username, String password) {
         try (Connection conn = DriverManager.getConnection(driverURL);
-            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
 
-            // Check if account exists
-            return rs.next();
+            if (rs.next()) { // Check if the ResultSet has any rows
+                // The login credentials are correct
+                return true;
+            } else {
+                // The login credentials are incorrect
+                return false;
+            }
         } catch (SQLException ex) {
-            System.out.print(ex);
+            System.out.println("An error occurred while executing the login query: " + ex.getMessage());
+            return false;
         }
-        return false;
     }
+
+
+//    public boolean login(String username, String password) {
+//        try (Connection conn = DriverManager.getConnection(driverURL);
+//            PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM users WHERE username = ? AND password = ?")) {
+//            pstmt.setString(1, username);
+//            pstmt.setString(2, password);
+//            ResultSet rs = pstmt.executeQuery();
+//
+//            // Check if account exists
+//            return rs.next();
+//        } catch (SQLException ex) {
+//            loginAttempt(username);
+//            
+//            ArrayList<User> users = getUsers();
+//            for(int nctr = 0; nctr < users.size(); nctr++){
+//            System.out.println("===== User " + users.get(nctr).getId() + " =====");
+//            System.out.println(" username: " + users.get(nctr).getUsername());
+//            System.out.println(" password: " + users.get(nctr).getPassword());
+//            System.out.println(" role: " + users.get(nctr).getRole());
+//            System.out.println(" locked: " + users.get(nctr).getLocked());
+//        }
+//            
+//            System.out.print(ex);
+//        }
+//        return false;
+//    }
     
     public void removeUser(String username) {
         String sql = "DELETE FROM users WHERE username='" + username + "';";
